@@ -1,9 +1,10 @@
 name: Unittest
 
 on:
-  push:
-    branches-ignore:
+  pull_request:
+    branches:
       - main
+  push:
     paths:
       - '**.py'
       - '.github/workflows/unittests.yml'
