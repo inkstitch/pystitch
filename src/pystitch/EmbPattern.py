@@ -1513,7 +1513,7 @@ class EmbPattern:
         if pattern is None:
             pattern = EmbPattern()
 
-        if EmbPattern.is_str(f):
+        if isinstance(f, str):
             text_mode = False
             try:
                 text_mode = reader.READ_FILE_IN_TEXT_MODE
@@ -1572,7 +1572,7 @@ class EmbPattern:
     def read_csv(f, settings=None, pattern=None):
         """Reads fileobject as CSV file"""
         return EmbPattern.read_embroidery(CsvReader, f, settings, pattern)
-    
+
     @staticmethod
     def read_json(f, settings=None, pattern=None):
         """Reads fileobject as JSON file"""
@@ -1694,7 +1694,7 @@ class EmbPattern:
                     pass
             pattern = pattern.get_normalized_pattern(settings)
 
-        if EmbPattern.is_str(stream):
+        if isinstance(stream, str):
             text_mode = False
             try:
                 text_mode = writer.WRITE_FILE_IN_TEXT_MODE
@@ -1811,10 +1811,3 @@ class EmbPattern:
             EmbPattern.write_embroidery(writer, pattern, filename, settings)
         else:
             raise IOError("No supported writer found.")
-
-    @staticmethod
-    def is_str(obj):
-        try:
-            return isinstance(obj, basestring)
-        except NameError:
-            return isinstance(obj, str)

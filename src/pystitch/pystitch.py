@@ -43,4 +43,3 @@ write_qcc = EmbPattern.write_qcc
 write_svg = EmbPattern.write_svg
 write_png = EmbPattern.write_png
 write = EmbPattern.static_write
-is_str = EmbPattern.is_str
