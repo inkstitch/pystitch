@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 from .ReadHelper import (
     read_int_8,
@@ -46,7 +49,7 @@ def signed16(b0, b1):
         return b
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     b = f.read(6)
     # magic code: %vsm%\0
     skip_vp3_string(f)  # "Produced by     Software Ltd"
@@ -67,7 +70,7 @@ def read(f, out, settings=None):
     out.end()
 
 
-def vp3_read_colorblock(f, out, center_x, center_y):
+def vp3_read_colorblock(f: BinaryIO, out: EmbPattern, center_x, center_y):
     bytescheck = f.read(3)  # \x00\x05\x00
     distance_to_next_block_050 = read_int_32be(f)
     block_end_position = distance_to_next_block_050 + f.tell()
@@ -107,7 +110,7 @@ def vp3_read_colorblock(f, out, center_x, center_y):
             out.trim()
 
 
-def vp3_read_thread(f):
+def vp3_read_thread(f: BinaryIO):
     thread = EmbThread()
     colors = read_int_8(f)
     transition = read_int_8(f)

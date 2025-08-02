@@ -1,9 +1,11 @@
+from typing import BinaryIO
+from .EmbPattern import EmbPattern
 from .WriteHelper import write_string_utf8
 
 ENCODE = False
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     write_string_utf8(f, "%d\r\n" % len(pattern.threadlist))
     index = 0
     for thread in pattern.threadlist:

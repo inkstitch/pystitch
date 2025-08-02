@@ -1,8 +1,11 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 from .ReadHelper import read_int_8, read_int_24be, signed8, read_string_8
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x83, 0)
     name = read_string_8(f, 0x10).strip()
     out.metadata("name", name)

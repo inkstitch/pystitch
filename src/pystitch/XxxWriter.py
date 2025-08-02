@@ -1,4 +1,7 @@
+from typing import BinaryIO
+
 from .EmbConstant import *
+from .EmbPattern import EmbPattern
 from .WriteHelper import write_int_8, write_int_16le, write_int_32le
 
 FULL_JUMP = False
@@ -7,7 +10,7 @@ MAX_JUMP_DISTANCE = 124  # 0xFCFF/2 16 bit signed, FD,FE,FF reserved.
 MAX_STITCH_DISTANCE = 124
 
 
-def write_xxx_header_b(pattern, f):
+def write_xxx_header_b(pattern: EmbPattern, f: BinaryIO):
     stitches = pattern.stitches
     for i in range(0, 0x17):
         write_int_8(f, 0x00)
@@ -38,7 +41,7 @@ def write_xxx_header_b(pattern, f):
         write_int_8(f, 0x00)
 
 
-def write_xxx_header_a(pattern, f):
+def write_xxx_header_a(pattern: EmbPattern, f: BinaryIO):
     stitches = pattern.stitches
     for i in range(0, 0x17):
         write_int_8(f, 0x00)
@@ -61,7 +64,7 @@ def write_xxx_header_a(pattern, f):
         write_int_8(f, 0x00)
 
 
-def write_xxx_stitches(pattern, f):
+def write_xxx_stitches(pattern: EmbPattern, f: BinaryIO):
     stitches = pattern.stitches
     xx = 0
     yy = 0
@@ -105,7 +108,7 @@ def write_xxx_stitches(pattern, f):
             continue
 
 
-def write_xxx_colors(pattern, f):
+def write_xxx_colors(pattern: EmbPattern, f: BinaryIO):
     write_int_8(f, 0x00)
     write_int_8(f, 0x00)
     current_color = 0
@@ -123,7 +126,7 @@ def write_xxx_colors(pattern, f):
     write_int_8(f, 0x01)
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     write_xxx_header_b(pattern, f)
     place_holder_for_end_of_stitches = f.tell()
     write_int_32le(f, 0x00000000)

@@ -1,3 +1,5 @@
+from typing import BinaryIO
+
 import pystitch
 from pystitch import (
     CONTINGENCY_SEQUIN_UTILIZE,
@@ -16,13 +18,14 @@ from pystitch import (
     get_common_name_dictionary,
     COMMAND_MASK,
 )
+from .EmbPattern import EmbPattern
 from pystitch.WriteHelper import write_string_utf8
 
 WRITES_SPEEDS = True
 SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_UTILIZE
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     writer = GenericWriter(pattern, f, settings)
     writer.write()
 
@@ -47,7 +50,7 @@ class GenericWriter:
     Missing segments are treated as if they never existed. Value properties will differ if segments are excluded.
     """
 
-    def __init__(self, pattern, f, settings):
+    def __init__(self, pattern: EmbPattern, f: BinaryIO, settings):
         self.pattern = pattern
         self.f = f
         self.settings = settings

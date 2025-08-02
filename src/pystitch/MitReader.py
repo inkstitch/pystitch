@@ -1,7 +1,12 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
+
+
 MIT_SIZE_CONVERSION_RATIO = 2.0 / 1.0
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     count = 0
     previous_ctrl = -1
     while True:

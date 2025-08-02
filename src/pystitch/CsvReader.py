@@ -1,9 +1,11 @@
+from typing import TextIO
+from .EmbPattern import EmbPattern
 from .EmbFunctions import *
 
 READ_FILE_IN_TEXT_MODE = True
 
 
-def read(f, out, settings=None):
+def read(f: TextIO, out: EmbPattern, settings=None):
     import csv
 
     csv_reader = csv.reader(f, delimiter=",")

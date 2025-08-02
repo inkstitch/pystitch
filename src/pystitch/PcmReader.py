@@ -1,9 +1,12 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .ReadHelper import read_int_8, read_int_16be, read_int_24be, signed24
 
 PC_SIZE_CONVERSION_RATIO = 5.0 / 3.0
 
 
-def read_pc_file(f, out, settings=None):
+def read_pc_file(f: BinaryIO, out: EmbPattern, settings=None):
     pcm_threads = [
         {"color": 0x000000, "description": "PCM Color 1"},
         {"color": 0x000080, "description": "PCM Color 2"},
@@ -59,5 +62,5 @@ def read_pc_file(f, out, settings=None):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     read_pc_file(f, out)

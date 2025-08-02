@@ -1,7 +1,10 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .ReadHelper import read_int_32le, read_int_16le, read_int_8, read_int_24be, signed8
 
 
-def read_zhs_stitches(f, out):
+def read_zhs_stitches(f: BinaryIO, out: EmbPattern):
     count = 0
 
     xx = 0
@@ -73,7 +76,7 @@ def read_zhs_stitches(f, out):
     out.end()
 
 
-def read_zhs_header(f, out):
+def read_zhs_header(f: BinaryIO, out: EmbPattern):
     color_count = read_int_8(f)
     for i in range(color_count):
         out.add_thread(read_int_24be(f))
@@ -98,7 +101,7 @@ def read_zhs_header(f, out):
         pass
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x0F, 0)
     stitch_start_position = read_int_32le(f)
     header_start_position = read_int_32le(f)

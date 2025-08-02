@@ -1,7 +1,10 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .ReadHelper import signed8
 
 
-def stc_stitch_encoding_read(f, out):
+def stc_stitch_encoding_read(f: BinaryIO, out: EmbPattern):
     count = 0
     while True:
         count += 1
@@ -26,6 +29,6 @@ def stc_stitch_encoding_read(f, out):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x28, 1)  # DESIGN: xxxxxx STITCHES: xxxx.
     stc_stitch_encoding_read(f, out)

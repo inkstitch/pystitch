@@ -1,9 +1,11 @@
+from typing import TextIO
+from .EmbPattern import EmbPattern
 from .EmbThread import *
 
 READ_FILE_IN_TEXT_MODE = True
 
 
-def read(f, out, settings=None):
+def read(f: TextIO, out: EmbPattern, settings=None):
     count = int(f.readline())
     for i in range(0, count):
         line = f.readline()

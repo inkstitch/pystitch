@@ -1,7 +1,9 @@
 import math
+from typing import BinaryIO
 from itertools import cycle
 
 from .EmbFunctions import *
+from .EmbPattern import EmbPattern
 from .WriteHelper import write_string_utf8
 
 # This writer is in a different file because our version is substantially
@@ -13,7 +15,7 @@ MAX_JUMP_DISTANCE = float('inf')
 MAX_STITCH_DISTANCE = float('inf')
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     if settings is None:
         settings = {}
 
@@ -170,7 +172,7 @@ def write(pattern, f, settings=None):
             write_string_utf8(f, "%s\r\n" % value.strip())
 
 
-def init(f, laser_mode, dynamic_laser_power, max_spindle_speed, min_spindle_speed, spindle_speed, feed_rate):
+def init(f: BinaryIO, laser_mode, dynamic_laser_power, max_spindle_speed, min_spindle_speed, spindle_speed, feed_rate):
     write_string_utf8(f, "G90 (use absolute coordinates)\r\n")
     write_string_utf8(f, "G21 (coordinates will be specified in millimeters)\r\n")
 

@@ -1,4 +1,9 @@
-def new_stitch_encoding_read(f, out):
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
+
+
+def new_stitch_encoding_read(f: BinaryIO, out: EmbPattern):
     count = 0
     while True:
         count += 1
@@ -29,6 +34,6 @@ def new_stitch_encoding_read(f, out):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(2, 1)  # stitchcount.
     new_stitch_encoding_read(f, out)

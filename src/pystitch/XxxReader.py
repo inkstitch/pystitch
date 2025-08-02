@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 from .ReadHelper import read_int_8, read_int_16le, read_int_32be, signed8, signed16
 
@@ -6,7 +9,7 @@ from .ReadHelper import read_int_8, read_int_16le, read_int_32be, signed8, signe
 # 7F 7F 02 14 is end.
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x27, 1)
     num_of_colors = read_int_16le(f)
     f.seek(0x100, 0)

@@ -1,11 +1,14 @@
+import sys
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
+from .EmbFunctions import *
 from .WriteHelper import write_string_utf8
 
-from .EmbFunctions import *
-import sys
 TENTH_MM_PER_INCH = 254
 
 
-def write(pattern, stream, settings=None):
+def write(pattern: EmbPattern, stream, settings=None):
     write_string_utf8(stream, "c s\n")
 
     trimmed = True

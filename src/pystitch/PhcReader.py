@@ -1,9 +1,12 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThreadPec import get_thread_set
 from .PecReader import read_pec_graphics, read_pec_stitches
 from .ReadHelper import read_int_8, read_int_16le, read_int_32le
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x4A, 0)
     pec_graphic_icon_height = read_int_8(f)
     f.seek(1, 1)

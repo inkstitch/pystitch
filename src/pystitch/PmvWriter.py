@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbConstant import *
 from .WriteHelper import write_int_8, write_int_16le, write_string_utf8
 
@@ -5,7 +8,7 @@ MAX_STITCH_DISTANCE = 70
 MAX_PERMITTED_STITCHES = 100
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     max_x = -200000000
     min_x = +200000000
     max_y = -200000000
@@ -97,7 +100,7 @@ def write(pattern, f, settings=None):
     f.write(b"\x00\x00\x00\x00\x00\x00\x00\x00" b"\x00\x00\x00\x00\x00\x00\x00\x00")
 
 
-def write_length_lookup_table(f, length_range):
+def write_length_lookup_table(f: BinaryIO, length_range):
     # I've not solved this for how they are actually made, writing a something that should work.
     write_values = [
         (0, 0),
@@ -130,7 +133,7 @@ def write_length_lookup_table(f, length_range):
         write_int_16le(f, other_at_step)
 
 
-def write_width_lookup_table(f, width_range):
+def write_width_lookup_table(f: BinaryIO, width_range):
     if width_range == 0:
         write_int_8(f, 0)
         write_int_8(f, 1)

@@ -1,8 +1,11 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThreadJef import get_thread_set
 from .ReadHelper import read_int_32le, signed8
 
 
-def read_jef_stitches(f, out, settings=None):
+def read_jef_stitches(f: BinaryIO, out: EmbPattern, settings=None):
     color_index = 1
     while True:
         b = bytearray(f.read(2))
@@ -59,7 +62,7 @@ def read_jef_stitches(f, out, settings=None):
     out.interpolate_trims(count_max, trim_distance, clipping)
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     jef_threads = get_thread_set()
     stitch_offset = read_int_32le(f)
     f.seek(20, 1)

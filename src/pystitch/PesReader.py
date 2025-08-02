@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 from .PecReader import read_pec
 from .ReadHelper import (
@@ -9,7 +12,7 @@ from .ReadHelper import (
 )
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     loaded_thread_values = []
     pes_string = read_string_8(f, 8)
 
@@ -68,14 +71,14 @@ def read(f, out, settings=None):
     out.interpolate_duplicate_color_as_stop()
 
 
-def read_pes_string(f):
+def read_pes_string(f: BinaryIO):
     length = read_int_8(f)
     if length == 0:
         return None
     return read_string_8(f, length)
 
 
-def read_pes_metadata(f, out):
+def read_pes_metadata(f: BinaryIO, out: EmbPattern):
     v = read_pes_string(f)
     if v is not None and len(v) > 0:
         out.metadata("name", v)
@@ -93,7 +96,7 @@ def read_pes_metadata(f, out):
         out.metadata("comments", v)
 
 
-def read_pes_thread(f, threadlist):
+def read_pes_thread(f: BinaryIO, threadlist):
     thread = EmbThread()
     thread.catalog_number = read_pes_string(f)
     thread.color = 0xFF000000 | read_int_24be(f)
@@ -104,17 +107,17 @@ def read_pes_thread(f, threadlist):
     threadlist.append(thread)
 
 
-def read_pes_header_version_1(f, out):
+def read_pes_header_version_1(f: BinaryIO, out: EmbPattern):
     # Nothing I care about.
     pass
 
 
-def read_pes_header_version_4(f, out):
+def read_pes_header_version_4(f: BinaryIO, out: EmbPattern):
     f.seek(4, 1)
     read_pes_metadata(f, out)
 
 
-def read_pes_header_version_5(f, out, threadlist):
+def read_pes_header_version_5(f: BinaryIO, out: EmbPattern, threadlist):
     f.seek(4, 1)
     read_pes_metadata(f, out)
     f.seek(24, 1)  # this is 36 in version 6 and 24 in version 5
@@ -136,7 +139,7 @@ def read_pes_header_version_5(f, out, threadlist):
         read_pes_thread(f, threadlist)
 
 
-def read_pes_header_version_6(f, out, threadlist):
+def read_pes_header_version_6(f: BinaryIO, out: EmbPattern, threadlist):
     f.seek(4, 1)
     read_pes_metadata(f, out)
     f.seek(36, 1)  # this is 36 in version 6 and 24 in version 5
@@ -158,7 +161,7 @@ def read_pes_header_version_6(f, out, threadlist):
         read_pes_thread(f, threadlist)
 
 
-def read_pes_header_version_7(f, out, threadlist):
+def read_pes_header_version_7(f: BinaryIO, out: EmbPattern, threadlist):
     f.seek(4, 1)
     read_pes_metadata(f, out)
     f.seek(36, 1)
@@ -180,7 +183,7 @@ def read_pes_header_version_7(f, out, threadlist):
         read_pes_thread(f, threadlist)
 
 
-def read_pes_header_version_8(f, out, threadlist):
+def read_pes_header_version_8(f: BinaryIO, out: EmbPattern, threadlist):
     f.seek(4, 1)
     read_pes_metadata(f, out)
     f.seek(38, 1)
@@ -202,7 +205,7 @@ def read_pes_header_version_8(f, out, threadlist):
         read_pes_thread(f, threadlist)
 
 
-def read_pes_header_version_9(f, out, threadlist):
+def read_pes_header_version_9(f: BinaryIO, out: EmbPattern, threadlist):
     f.seek(4, 1)
     read_pes_metadata(f, out)
     f.seek(14, 1)
@@ -228,7 +231,7 @@ def read_pes_header_version_9(f, out, threadlist):
         read_pes_thread(f, threadlist)
 
 
-def read_pes_header_version_10(f, out, threadlist):
+def read_pes_header_version_10(f: BinaryIO, out: EmbPattern, threadlist):
     f.seek(4, 1)
     read_pes_metadata(f, out)
     f.seek(14, 1)

@@ -1,5 +1,7 @@
+from typing import BinaryIO
 from xml.etree.cElementTree import Element, ElementTree, SubElement
 
+from .EmbPattern import EmbPattern
 from .EmbConstant import CONTINGENCY_SEQUIN_STITCH
 
 SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_STITCH
@@ -28,7 +30,7 @@ ATTR_STROKE_WIDTH = "stroke-width"
 VALUE_NONE = "none"
 
 
-def create_svg_dom(pattern):
+def create_svg_dom(pattern: EmbPattern):
     root = Element(NAME_SVG)
     root.set(ATTR_VERSION, VALUE_SVG_VERSION)
     root.set(ATTR_XMLNS, VALUE_XMLNS)
@@ -60,7 +62,7 @@ def create_svg_dom(pattern):
     return ElementTree(root)
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     """Writes an svg file of the stitchblocks."""
     tree = create_svg_dom(pattern)
     tree.write(f)

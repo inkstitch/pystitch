@@ -1,4 +1,7 @@
+from typing import BinaryIO
+
 from .EmbConstant import *
+from .EmbPattern import EmbPattern
 from .WriteHelper import write_string_utf8
 
 SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_UTILIZE
@@ -104,7 +107,7 @@ def encode_record(x, y, flags):
     return bytes(bytearray([b0, b1, b2]))
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     extended_header = False
     trim_at = 3
     if settings is not None:

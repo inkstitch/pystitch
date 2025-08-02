@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 from .ReadHelper import (
     read_int_8,
@@ -10,7 +13,7 @@ from .ReadHelper import (
 PC_SIZE_CONVERSION_RATIO = 5.0 / 3.0
 
 
-def read_pc_file(f, out, settings=None):
+def read_pc_file(f: BinaryIO, out: EmbPattern, settings=None):
     version = read_int_8(f)
     hoop_size = read_int_8(f)
     # 0 for PCD,
@@ -50,5 +53,5 @@ def read_pc_file(f, out, settings=None):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     read_pc_file(f, out)

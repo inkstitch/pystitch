@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .WriteHelper import write_int_8, write_int_16be, write_int_32be, write_string_utf8
 
 ENCODE = False
@@ -11,7 +14,7 @@ def patch_byte_offset(stream, offset):
     stream.seek(current_pos, 0)  # Absolute position seek.
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     write_int_32be(f, 1)
     write_int_32be(f, 8)
     placeholder = f.tell()

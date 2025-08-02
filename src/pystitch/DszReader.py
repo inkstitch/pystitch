@@ -1,7 +1,10 @@
+from typing import BinaryIO
+
 from .DstReader import dst_read_header
+from .EmbPattern import EmbPattern
 
 
-def z_stitch_encoding_read(f, out):
+def z_stitch_encoding_read(f: BinaryIO, out: EmbPattern):
     count = 0
     while True:
         count += 1
@@ -38,6 +41,6 @@ def z_stitch_encoding_read(f, out):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     dst_read_header(f, out)
     z_stitch_encoding_read(f, out)

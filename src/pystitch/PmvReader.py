@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .ReadHelper import read_int_8, read_int_16le
 
 
@@ -19,7 +22,7 @@ def find_extends(stitches):
     return min_x, min_y, max_x, max_y
 
 
-def read_pmv_stitches(f, out, settings=None):
+def read_pmv_stitches(f: BinaryIO, out: EmbPattern, settings=None):
     """PMV files are stitch files, not embroidery."""
     px = 0
     # stitches = []
@@ -66,6 +69,6 @@ def read_pmv_stitches(f, out, settings=None):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x64, 0)
     read_pmv_stitches(f, out)
