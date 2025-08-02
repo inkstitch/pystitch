@@ -4,6 +4,7 @@ import unittest
 
 from test.pattern_for_tests import *
 from pystitch import GenericWriter
+import pystitch
 
 
 class TestConverts(unittest.TestCase):
@@ -13,9 +14,9 @@ class TestConverts(unittest.TestCase):
         self.addCleanup(os.remove, file1)
         self.addCleanup(os.remove, file2)
         pattern = get_fractal_pattern()
-        pattern.write(file1)
+        pystitch.write(pattern, file1)
 
-        pattern = EmbPattern(file1)
+        pattern = pystitch.read(file1)
 
         EmbPattern.write_embroidery(
             GenericWriter,

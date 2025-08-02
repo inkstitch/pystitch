@@ -1,6 +1,7 @@
 import unittest
 
 from test.pattern_for_tests import *
+import pystitch
 
 
 class TestExplicitIOErrors(unittest.TestCase):
@@ -10,7 +11,7 @@ class TestExplicitIOErrors(unittest.TestCase):
         We test that now.
         """
         file1 = "nosuchfile.dst"
-        self.assertRaises(IOError, lambda: EmbPattern(file1))
+        self.assertRaises(IOError, lambda: pystitch.read(file1))
 
     def test_write_non_supported(self):
         """
@@ -19,7 +20,7 @@ class TestExplicitIOErrors(unittest.TestCase):
         """
         pattern = get_simple_pattern()
         file1 = "nosuchfile.pdf"
-        self.assertRaises(IOError, lambda: pattern.write(file1))
+        self.assertRaises(IOError, lambda: pystitch.write(pattern, file1))
 
     def test_write_no_writer(self):
         """
@@ -28,4 +29,4 @@ class TestExplicitIOErrors(unittest.TestCase):
         """
         pattern = get_simple_pattern()
         file1 = "nosuchfile.dat"
-        self.assertRaises(IOError, lambda: pattern.write(file1))
+        self.assertRaises(IOError, lambda: pystitch.write(pattern, file1))

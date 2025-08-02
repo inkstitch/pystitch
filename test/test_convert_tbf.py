@@ -3,6 +3,7 @@ from __future__ import print_function
 import unittest
 
 from test.pattern_for_tests import *
+import pystitch
 
 
 class TestConverts(unittest.TestCase):
@@ -220,9 +221,9 @@ class TestConverts(unittest.TestCase):
         pattern = get_fractal_pattern()
         file1 = "fractal1.tbf"
         file2 = "fractal2.tbf"
-        pattern.write(file1)
+        pystitch.write(pattern, file1)
         f1 = read_tbf(file1)
-        f1.write(file2)
+        pystitch.write(f1, file2)
         f2 = read_tbf(file2)
         for i in range(len(f1.stitches)):
             self.assertEqual(f1.stitches[i], f2.stitches[i])
