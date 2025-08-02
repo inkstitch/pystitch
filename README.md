@@ -152,6 +152,7 @@ Pystitch will read:
 * .phc
 * .sew
 * .shv
+* .spx
 * .stc
 * .stx
 * .tap
