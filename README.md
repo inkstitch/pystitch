@@ -109,58 +109,59 @@ In most cases this information isn't going to matter, but it is provided because
 ### Embroidery Formats:
 
 Pystitch will write:
-* .pes (mandated)
-* .dst (mandated)
-* .exp (mandated)
-* .jef (mandated)
-* .vp3 (mandated)
-* .u01
-* .pec
-* .xxx
-* .tbf
-* .gcode
+* .dst (Tajima Embroidery Format)
+* .exp (Melco Expanded Embroidery Format)
+* .gcode (gcode Format, Text File)
+* .jef (Janome Embroidery Format)
+* .pec (Brother Embroidery Format)
+* .pes (Brother Embroidery Format)
+* .tbf (Tajima Embroidery Format)
+* .u01 (Barudan Embroidery Format)
+* .vp3 (Pfaff Embroidery Format)
+* .xxx (Singer Embroidery Format)
 
 Pystitch will read:
-* .pes (mandated)
-* .dst (mandated)
-* .exp (mandated)
-* .jef (mandated)
-* .vp3 (mandated)
-* .10o
-* .100
-* .bro
-* .dat (barudan & sunstar)
-* .dsb
-* .dsz
-* .emd
-* .exy
-* .fxy
-* .gt
-* .hus
-* .inb
-* .jpx
-* .ksm
-* .max
-* .mit
-* .new
-* .pcd
-* .pcm
-* .pcq
-* .pcs
-* .pec
-* .phb
-* .phc
-* .sew
-* .shv
-* .stc
-* .stx
-* .tap
-* .tbf
-* .u01
-* .xxx
-* .zhs
-* .zxy
-* .gcode
+* .100 (Toyota Embroidery Format)
+* .10o (Toyota Embroidery Format)
+* .bro (Bits & Volts Embroidery Format)
+* .dat (Sunstar or Barudan Embroidery Format)
+* .dsb (Tajima(Barudan) Embroidery Format)
+* .dst (Tajima Embroidery Format)
+* .dsz (ZSK USA Embroidery Format)
+* .emd (Elna Embroidery Format)
+* .exp (Melco Expanded Embroidery Format)
+* .exy (Eltac Embroidery Format)
+* .fxy (Fortron Embroidery Format)
+* .gcode (gcode Format, Text File)
+* .gt (Gold Thread Embroidery Format)
+* .hus (Husqvarna Embroidery Format)
+* .inb (Inbro Embroidery Format)
+* .jef (Janome Embroidery Format)
+* .jpx (Janome Embroidery Format)
+* .ksm (Pfaff Embroidery Format)
+* .max (Pfaff Embroidery Format)
+* .mit (Mitsubishi Embroidery Format)
+* .new (Ameco Embroidery Format)
+* .pcd (Pfaff Embroidery Format)
+* .pcm (Pfaff Embroidery Format)
+* .pcq (Pfaff Embroidery Format)
+* .pcs (Pfaff Embroidery Format)
+* .pec (Brother Embroidery Format)
+* .pes (Brother Embroidery Format)
+* .phb (Brother Embroidery Format)
+* .phc (Brother Embroidery Format)
+* .sew (Janome Embroidery Format)
+* .shv (Husqvarna Viking Embroidery Format)
+* .spx (Pfaff Embroidery Format)
+* .stc (Gunold Embroidery Format)
+* .stx (Data Stitch Embroidery Format)
+* .tap (Happy Embroidery Format)
+* .tbf (Tajima Embroidery Format)
+* .u01 (Barudan Embroidery Format)
+* .vp3 (Pfaff Embroidery Format)
+* .xxx (Singer Embroidery Format)
+* .zhs (Zeng Hsing Embroidery Format)
+* .zxy (ZSK TC Embroidery Format)
 
 ### Related Formats
 Pystitch includes some related formats like pure color formats that can be loaded as helpers for formats without colors. Or .pmv which is a stitch pattern format for Brother sewing machines.
