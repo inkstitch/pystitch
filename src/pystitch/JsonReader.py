@@ -1,4 +1,7 @@
+from typing import BinaryIO
+
 from .EmbFunctions import *
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 
 
@@ -18,7 +21,7 @@ def decoded_command(command_dict, name):
     return command
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     import json
 
     json_object = json.load(f)

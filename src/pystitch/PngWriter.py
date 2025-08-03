@@ -1,7 +1,9 @@
 import struct
 import zlib
+from typing import BinaryIO
 from math import sqrt
 
+from .EmbPattern import EmbPattern
 from .EmbConstant import *
 from .EmbThread import EmbThread
 
@@ -500,7 +502,7 @@ def draw_guides(draw_buff, extends):
         draw_buff.draw_line(0, y, 30, y)
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     guides = settings.get("guides", False)
     extends = pattern.bounds()
     pattern.translate(-extends[0], -extends[1])

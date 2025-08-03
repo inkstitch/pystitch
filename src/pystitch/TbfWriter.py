@@ -1,4 +1,7 @@
+from typing import BinaryIO
+
 from . import decode_embroidery_command
+from .EmbPattern import EmbPattern
 from .EmbConstant import *
 from .WriteHelper import write_string_utf8, write_int_8
 
@@ -10,7 +13,7 @@ THREAD_CHANGE_COMMAND = NEEDLE_SET
 EXPLICIT_TRIM = True
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     if settings is not None and "ct0" in settings:
         ct0 = settings.get("ct0")
         write_ct0(pattern, ct0)
@@ -122,12 +125,12 @@ def write(pattern, f, settings=None):
     f.write(b"\x1a")
 
 
-def write_ct0(pattern, filename, settings=None):
+def write_ct0(pattern: EmbPattern, filename, settings=None):
     with open(filename, "wb") as f:
         _write_ct0(pattern, f, settings=settings)
 
 
-def _write_ct0(pattern, f, settings=None):
+def _write_ct0(pattern: EmbPattern, f: BinaryIO, settings=None):
     write_string_utf8(f, "TAJ-DGML-PULSE  1-1A 2060(550.0")
     write_int_8(f, 0x81)
     write_string_utf8(f, "~400.0)S         2.00")

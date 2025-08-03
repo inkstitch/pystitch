@@ -1,3 +1,8 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
+
+
 def getbit(b, pos):
     return (b >> pos) & 1
 
@@ -32,7 +37,7 @@ def decode_dy(b0, b1, b2):
     return -y
 
 
-def process_header_info(out, prefix, value):
+def process_header_info(out: EmbPattern, prefix, value):
     if prefix == "LA":
         out.metadata("name", value)
     elif prefix == "AU":
@@ -46,7 +51,7 @@ def process_header_info(out, prefix, value):
         out.metadata(prefix, value)
 
 
-def dst_read_header(f, out):
+def dst_read_header(f: BinaryIO, out: EmbPattern):
     header = f.read(512)
     start = 0
     for i, element in enumerate(header):
@@ -64,7 +69,7 @@ def dst_read_header(f, out):
                 continue
 
 
-def dst_read_stitches(f, out, settings=None):
+def dst_read_stitches(f: BinaryIO, out: EmbPattern, settings=None):
     sequin_mode = False
     while True:
         byte = bytearray(f.read(3))
@@ -100,6 +105,6 @@ def dst_read_stitches(f, out, settings=None):
     out.interpolate_trims(count_max, trim_distance, clipping)
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     dst_read_header(f, out)
     dst_read_stitches(f, out, settings)

@@ -1,11 +1,14 @@
+from typing import BinaryIO
+
 from .EmbFunctions import *
+from .EmbPattern import EmbPattern
 from .WriteHelper import write_string_utf8
 
 SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_STITCH
 SCALE = (-1, -1)  # This performs a default X,Y flip.
 
 
-def write_data(pattern, f):
+def write_data(pattern: EmbPattern, f: BinaryIO):
     bounds = [float(e) / 10.0 for e in pattern.bounds()]  # convert to mm.
     width = bounds[2] - bounds[0]
     height = bounds[3] - bounds[1]
@@ -40,14 +43,14 @@ def write_data(pattern, f):
             write_string_utf8(f, "(%s: %d)\n" % (name, the_value))
 
 
-def write_metadata(pattern, f):
+def write_metadata(pattern: EmbPattern, f: BinaryIO):
     if len(pattern.extras) > 0:
         for the_key, the_value in pattern.extras.items():
             if isinstance(the_value, str):
                 write_string_utf8(f, "(%s: %s)\n" % (the_key, the_value))
 
 
-def write_threads(pattern, f):
+def write_threads(pattern: EmbPattern, f: BinaryIO):
     if len(pattern.threadlist) > 0:
         for i, thread in enumerate(pattern.threadlist):
             write_string_utf8(
@@ -63,7 +66,7 @@ def write_threads(pattern, f):
             )
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     if settings is None:
         settings = {}
     increment_value = settings.get("stitch_z_travel", 10.0)

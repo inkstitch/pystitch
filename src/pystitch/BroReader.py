@@ -1,9 +1,11 @@
+from typing import BinaryIO
+from .EmbPattern import EmbPattern
 from .ReadHelper import read_int_8, read_int_16le, signed8, signed16
 
 # Do you even embroider .bro?
 
 
-def read_bro_stitches(f, out):
+def read_bro_stitches(f: BinaryIO, out: EmbPattern):
     count = 0
     while True:
         count += 1
@@ -41,6 +43,6 @@ def read_bro_stitches(f, out):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x100, 0)
     read_bro_stitches(f, out)

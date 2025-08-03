@@ -1,6 +1,8 @@
 import datetime
+from typing import BinaryIO
 
 from .EmbConstant import *
+from .EmbPattern import EmbPattern
 from .EmbThreadJef import get_thread_set
 from .WriteHelper import write_int_8, write_int_32le, write_string_utf8
 
@@ -18,7 +20,7 @@ HOOP_126X110 = 3
 HOOP_200X200 = 4
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     trims = False
     command_count_max = 3
 
@@ -181,7 +183,7 @@ def get_jef_hoop_size(width, height):
     return HOOP_110X110
 
 
-def write_hoop_edge_distance(f, x_hoop_edge, y_hoop_edge):
+def write_hoop_edge_distance(f: BinaryIO, x_hoop_edge, y_hoop_edge):
     if min(x_hoop_edge, y_hoop_edge) >= 0:
         write_int_32le(f, x_hoop_edge)  # left
         write_int_32le(f, y_hoop_edge)  # top

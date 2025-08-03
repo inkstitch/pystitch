@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbFunctions import *
 from .WriteHelper import write_int_16le, write_int_32le
 
@@ -9,7 +12,7 @@ MAX_JUMP_DISTANCE = 127
 MAX_STITCH_DISTANCE = 127
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     stitches = pattern.stitches
     stitch_count = len(stitches)
     for i in range(0, 0x80):

@@ -1,9 +1,12 @@
+from typing import BinaryIO
+
 from .EmbCompress import expand
+from .EmbPattern import EmbPattern
 from .EmbThreadHus import get_thread_set
 from .ReadHelper import read_int_16le, read_int_32le, read_string_8, signed8, signed16
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     magic_code = read_int_32le(f)
     number_of_stitches = read_int_32le(f)
     number_of_colors = read_int_32le(f)

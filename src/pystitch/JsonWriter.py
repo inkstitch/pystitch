@@ -1,4 +1,7 @@
+from typing import TextIO
+
 from .EmbFunctions import *
+from .EmbPattern import EmbPattern
 
 ENCODE = False
 WRITE_FILE_IN_TEXT_MODE = True
@@ -19,7 +22,7 @@ def decoded_name(names, data):
     return name
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: TextIO, settings=None):
     import json
 
     names = get_common_name_dictionary()

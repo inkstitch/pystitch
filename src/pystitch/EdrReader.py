@@ -1,8 +1,11 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 from .ReadHelper import read_int_8
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     while True:
         red = read_int_8(f)
         green = read_int_8(f)

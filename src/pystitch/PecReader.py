@@ -1,3 +1,6 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThreadPec import get_thread_set
 from .ReadHelper import read_int_8, read_int_24le, read_string_8
 
@@ -6,14 +9,14 @@ TRIM_CODE = 0x20
 FLAG_LONG = 0x80
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     pec_string = read_string_8(f, 8)
     # pec_string must equal #PEC0001
     read_pec(f, out)
     out.interpolate_duplicate_color_as_stop()
 
 
-def read_pec(f, out, pes_chart=None):
+def read_pec(f: BinaryIO, out: EmbPattern, pes_chart=None):
     f.seek(3, 1)  # LA:
     label = read_string_8(f, 16)  # Label
     if label is not None:
@@ -43,7 +46,7 @@ def read_pec(f, out, pes_chart=None):
     )
 
 
-def read_pec_graphics(f, out, size, stride, count, values):
+def read_pec_graphics(f: BinaryIO, out: EmbPattern, size, stride, count, values):
     v = values[:]
     v.insert(0, None)
     for i in range(0, count):
@@ -53,7 +56,7 @@ def read_pec_graphics(f, out, size, stride, count, values):
             out.metadata(name, (graphic, stride, v[i]))
 
 
-def process_pec_colors(colorbytes, out, values):
+def process_pec_colors(colorbytes, out: EmbPattern, values):
     thread_set = get_thread_set()
     max_value = len(thread_set)
     for byte in colorbytes:
@@ -62,7 +65,7 @@ def process_pec_colors(colorbytes, out, values):
         values.append(thread_value)
 
 
-def process_pec_table(colorbytes, out, chart, values):
+def process_pec_table(colorbytes, out: EmbPattern, chart, values):
     # This is how PEC actually allocates pre-defined threads to blocks.
     thread_set = get_thread_set()
     max_value = len(thread_set)
@@ -80,7 +83,7 @@ def process_pec_table(colorbytes, out, chart, values):
         values.append(thread_value)
 
 
-def map_pec_colors(colorbytes, out, chart, values):
+def map_pec_colors(colorbytes, out: EmbPattern, chart, values):
     if chart is None or len(chart) == 0:
         # Reading pec colors.
         process_pec_colors(colorbytes, out, values)
@@ -110,7 +113,7 @@ def signed7(b):
         return b
 
 
-def read_pec_stitches(f, out):
+def read_pec_stitches(f: BinaryIO, out: EmbPattern):
     while True:
         val1 = read_int_8(f)
         val2 = read_int_8(f)

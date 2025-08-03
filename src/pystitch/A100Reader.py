@@ -1,4 +1,8 @@
-def read_100_stitches(f, out):
+from typing import BinaryIO
+from .EmbPattern import EmbPattern
+
+
+def read_100_stitches(f: BinaryIO, out: EmbPattern):
     count = 0
     while True:
         count += 1
@@ -26,5 +30,5 @@ def read_100_stitches(f, out):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     read_100_stitches(f, out)

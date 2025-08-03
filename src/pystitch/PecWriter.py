@@ -1,6 +1,8 @@
 import re
+from typing import BinaryIO
 
 from .EmbConstant import *
+from .EmbPattern import EmbPattern
 from .EmbThread import build_unique_palette
 from .EmbThreadPec import get_thread_set
 from .PecGraphics import draw_scaled, get_blank
@@ -28,14 +30,14 @@ PEC_ICON_HEIGHT = 38
 GROUP_LONG = False
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     pattern.fix_color_count()
     pattern.interpolate_stop_as_duplicate_color()
     f.write(bytes("#PEC0001".encode("utf8")))
     write_pec(pattern, f)
 
 
-def write_pec(pattern, f, threadlist=None):
+def write_pec(pattern: EmbPattern, f: BinaryIO, threadlist=None):
     extends = pattern.bounds()
     if threadlist is None:
         pattern.fix_color_count()
@@ -46,7 +48,7 @@ def write_pec(pattern, f, threadlist=None):
     return color_info
 
 
-def write_pec_header(pattern, f, threadlist):
+def write_pec_header(pattern: EmbPattern, f: BinaryIO, threadlist):
     name = pattern.get_metadata("name", "Untitled")
     # the usage of other characters can mess up the output file
     name = re.sub('[^A-Za-z0-9]+', '', name) or "Untitled"
@@ -78,7 +80,7 @@ def write_pec_header(pattern, f, threadlist):
     return color_index_list, rgb_list
 
 
-def write_pec_block(pattern, f, extends):
+def write_pec_block(pattern: EmbPattern, f: BinaryIO, extends):
     width = extends[2] - extends[0]
     height = extends[3] - extends[1]
 
@@ -101,7 +103,7 @@ def write_pec_block(pattern, f, extends):
     f.seek(current_position, 0)
 
 
-def write_pec_graphics(pattern, f, extends):
+def write_pec_graphics(pattern: EmbPattern, f: BinaryIO, extends):
     blank = get_blank()
     for block in pattern.get_as_stitchblock():
         stitches = block[0]
@@ -115,7 +117,7 @@ def write_pec_graphics(pattern, f, extends):
         f.write(bytes(bytearray(blank)))
 
 
-def write_value(f, value, long=False, flag=0):
+def write_value(f: BinaryIO, value, long=False, flag=0):
     data = []
     if not long and -64 < value < 63:
         data.append(value & MASK_07_BIT)
@@ -128,23 +130,23 @@ def write_value(f, value, long=False, flag=0):
     f.write(bytes(bytearray(data)))
 
 
-def write_trimjump(f, dx, dy):
+def write_trimjump(f: BinaryIO, dx, dy):
     write_value(f, dx, long=True, flag=TRIM_CODE)
     write_value(f, dy, long=True, flag=TRIM_CODE)
 
 
-def write_jump(f, dx, dy):
+def write_jump(f: BinaryIO, dx, dy):
     write_value(f, dx, long=True, flag=JUMP_CODE)
     write_value(f, dy, long=True, flag=JUMP_CODE)
 
 
-def write_stitch(f, dx, dy):
+def write_stitch(f: BinaryIO, dx, dy):
     long = GROUP_LONG and -64 < dx < 63 and -64 < dy < 63
     write_value(f, dx, long)
     write_value(f, dy, long)
 
 
-def pec_encode(pattern, f):
+def pec_encode(pattern: EmbPattern, f: BinaryIO):
     color_two = True
     jumping = True
     init = True

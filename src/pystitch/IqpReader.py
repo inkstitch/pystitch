@@ -1,11 +1,13 @@
 import struct
+from typing import BinaryIO
 
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 
 TENTH_MM_PER_INCH = 254
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     # Read and verify the magic header
     magic = f.read(8).decode("ascii")
     expected_magic = "StitchV2"

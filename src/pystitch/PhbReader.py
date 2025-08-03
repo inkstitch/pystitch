@@ -1,9 +1,12 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThreadPec import get_thread_set
 from .PecReader import read_pec_stitches
 from .ReadHelper import read_int_8, read_int_16le, read_int_32le
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     # should start #PHB0003
     f.seek(0x71, 0)
     color_count = read_int_16le(f)

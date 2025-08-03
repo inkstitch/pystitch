@@ -1,4 +1,9 @@
-def parse(f):
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
+
+
+def parse(f: BinaryIO):
     comment = None
     code = ""
     value = ""
@@ -64,7 +69,7 @@ def parse(f):
             continue
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     absolute_mode = True
     flip_x = -1  # Assumes the GCode is flip_x, -1 is flip, 1 is normal
     flip_y = -1  # Assumes the Gcode is flip_y,  -1 is flip, 1 is normal

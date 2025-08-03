@@ -1,8 +1,11 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbFunctions import *
 from .WriteHelper import write_string_utf8
 
 
-def write_mimic(pattern, f):
+def write_mimic(pattern: EmbPattern, f: BinaryIO):
     emb_mod_convert = {
         STITCH: 0,
         JUMP: 1,
@@ -37,7 +40,7 @@ def write_mimic(pattern, f):
         write_string_utf8(f, txt_line)
 
 
-def write_normal(pattern, f):
+def write_normal(pattern: EmbPattern, f: BinaryIO):
     names = get_common_name_dictionary()
     color_index = 0
     color = pattern.get_thread_or_filler(color_index).color
@@ -58,7 +61,7 @@ def write_normal(pattern, f):
         write_string_utf8(f, txt_line)
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     mimic = False
     if settings is not None:
         if "mimic" in settings:

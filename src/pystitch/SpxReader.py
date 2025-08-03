@@ -1,7 +1,10 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .ReadHelper import read_int_8, read_int_16be, signed8, signed16
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x11E, 1)
     while True:
         b = bytearray(f.read(2))

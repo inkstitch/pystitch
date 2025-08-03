@@ -1,9 +1,12 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .ReadHelper import read_int_8, read_int_24le, read_int_32le, signed24
 
 MAX_SIZE_CONVERSION_RATIO = 1.235
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0xD5, 0)
     stitch_count = read_int_32le(f)
     for i in range(0, stitch_count):

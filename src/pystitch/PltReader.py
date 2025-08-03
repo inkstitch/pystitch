@@ -1,9 +1,12 @@
 import re
+from typing import TextIO
+
+from .EmbPattern import EmbPattern
 
 READ_FILE_IN_TEXT_MODE = True
 
 
-def read(f, out, settings=None):
+def read(f: TextIO, out: EmbPattern, settings=None):
     for line in f.readlines():
         line = line.strip()
         if line.startswith("PU"):

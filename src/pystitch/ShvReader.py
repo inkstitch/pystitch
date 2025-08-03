@@ -1,5 +1,7 @@
 import math
+from typing import BinaryIO
 
+from .EmbPattern import EmbPattern
 from .EmbConstant import *
 from .EmbThreadShv import get_thread_set
 from .ReadHelper import (
@@ -12,7 +14,7 @@ from .ReadHelper import (
 )
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     in_jump = False
     f.seek(0x56, 1)  # header text
     length = read_int_8(f)

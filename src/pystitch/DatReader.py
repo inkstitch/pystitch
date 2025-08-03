@@ -1,7 +1,9 @@
+from typing import BinaryIO
 from .EmbConstant import FAST, SLOW
+from .EmbPattern import EmbPattern
 
 
-def read_barudan_dat(f, out):
+def read_barudan_dat(f: BinaryIO, out: EmbPattern):
     count = 0
     while True:
         count += 1
@@ -87,7 +89,7 @@ def read_barudan_dat(f, out):
     return True
 
 
-def read_sunstar_dat_stitches(f, out):
+def read_sunstar_dat_stitches(f: BinaryIO, out: EmbPattern):
     count = 0
     while True:
         count += 1
@@ -127,14 +129,14 @@ def read_sunstar_dat_stitches(f, out):
     out.end()
 
 
-def read_sunstar_dat(f, out):
+def read_sunstar_dat(f: BinaryIO, out: EmbPattern):
     # f.seek(0x02, 0)
     # stitches = read_int_16le(f)
     f.seek(0x100, 0)
     read_sunstar_dat_stitches(f, out)
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     if not read_barudan_dat(f, out):
         f.seek(0, 0)
         read_sunstar_dat(f, out)

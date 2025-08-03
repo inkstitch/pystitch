@@ -1,4 +1,7 @@
+from typing import BinaryIO
+
 from .EmbConstant import *
+from .EmbPattern import EmbPattern
 from .EmbThreadPec import get_thread_set
 from .PecWriter import write_pec
 from .WriteHelper import (
@@ -26,7 +29,7 @@ EMB_ONE = "CEmbOne"
 EMB_SEG = "CSewSeg"
 
 
-def write(pattern, f, settings=None):
+def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     pattern.fix_color_count()
     pattern.interpolate_stop_as_duplicate_color()
     version = VERSION_1
@@ -52,13 +55,13 @@ def write(pattern, f, settings=None):
             write_version_6(pattern, f)
 
 
-def write_truncated_version_1(pattern, f):
+def write_truncated_version_1(pattern: EmbPattern, f: BinaryIO):
     write_string_utf8(f, PES_VERSION_1_SIGNATURE)
     f.write(b"\x16\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00")
     write_pec(pattern, f)
 
 
-def write_truncated_version_6(pattern, f):
+def write_truncated_version_6(pattern: EmbPattern, f: BinaryIO):
     chart = pattern.threadlist
     write_string_utf8(f, PES_VERSION_6_SIGNATURE)
     placeholder_pec_block = f.tell()
@@ -76,7 +79,7 @@ def write_truncated_version_6(pattern, f):
     write_int_16le(f, 0x0000)  # Found in version 6 not 5,4
 
 
-def write_version_1(pattern, f):
+def write_version_1(pattern: EmbPattern, f: BinaryIO):
     chart = get_thread_set()
     write_string_utf8(f, PES_VERSION_1_SIGNATURE)
 
@@ -110,7 +113,7 @@ def write_version_1(pattern, f):
     write_pec(pattern, f)
 
 
-def write_version_6(pattern, f):
+def write_version_6(pattern: EmbPattern, f: BinaryIO):
     pattern.fix_color_count()
     chart = pattern.threadlist
     write_string_utf8(f, PES_VERSION_6_SIGNATURE)
@@ -152,13 +155,13 @@ def write_version_6(pattern, f):
     write_int_16le(f, 0x0000)  # Found in version 6 not 5,4
 
 
-def write_pes_header_v1(f, distinct_block_objects):
+def write_pes_header_v1(f: BinaryIO, distinct_block_objects):
     write_int_16le(f, 0x01)  # scale to fit
     write_int_16le(f, 0x01)  # 0 = 100x100, 130x180 hoop
     write_int_16le(f, distinct_block_objects)
 
 
-def write_pes_header_v6(pattern, f, chart, distinct_block_objects):
+def write_pes_header_v6(pattern: EmbPattern, f: BinaryIO, chart, distinct_block_objects):
     write_int_16le(f, 0x01)  # 0 = 100x100, 130x180 hoop
     f.write(b"02")  # This is an 2-digit ascii number.
     write_pes_string_8(f, pattern.get_metadata("name", None))
@@ -202,7 +205,7 @@ def write_pes_header_v6(pattern, f, chart, distinct_block_objects):
     write_int_16le(f, distinct_block_objects)  # number ofdistinct blocks
 
 
-def write_pes_addendum(f, color_info):
+def write_pes_addendum(f: BinaryIO, color_info):
     color_index_list = color_info[0]
     rgb_list = color_info[1]
     count = len(color_index_list)
@@ -215,7 +218,7 @@ def write_pes_addendum(f, color_info):
         write_int_24le(f, r)
 
 
-def write_pes_string_8(f, string):
+def write_pes_string_8(f: BinaryIO, string):
     if string is None:
         write_int_8(f, 0)
         return
@@ -225,7 +228,7 @@ def write_pes_string_8(f, string):
     write_string_utf8(f, string)
 
 
-def write_pes_string_16(f, string):
+def write_pes_string_16(f: BinaryIO, string):
     if string is None:
         write_int_16le(f, 0)
         return
@@ -234,7 +237,7 @@ def write_pes_string_16(f, string):
     write_string_utf8(f, string)
 
 
-def write_pes_thread(f, thread):
+def write_pes_thread(f: BinaryIO, thread):
     write_pes_string_8(f, thread.catalog_number)
     write_int_8(f, thread.get_red())
     write_int_8(f, thread.get_green())
@@ -246,7 +249,7 @@ def write_pes_thread(f, thread):
     write_pes_string_8(f, thread.chart)
 
 
-def write_pes_blocks(f, pattern, chart, left, top, right, bottom, cx, cy):
+def write_pes_blocks(f: BinaryIO, pattern: EmbPattern, chart, left, top, right, bottom, cx, cy):
     if len(pattern.stitches) == 0:
         return
 
@@ -274,7 +277,7 @@ def write_pes_blocks(f, pattern, chart, left, top, right, bottom, cx, cy):
     return colorlog
 
 
-def write_pes_sewsegheader(f, left, top, right, bottom):
+def write_pes_sewsegheader(f: BinaryIO, left, top, right, bottom):
     width = right - left
     height = bottom - top
     hoop_height = 1800
@@ -315,7 +318,7 @@ def write_pes_sewsegheader(f, left, top, right, bottom):
     return placeholder_needs_section_data
 
 
-def get_as_segments_blocks(pattern, chart, adjust_x, adjust_y):
+def get_as_segments_blocks(pattern: EmbPattern, chart, adjust_x, adjust_y):
     color_index = 0
     current_thread = pattern.get_thread_or_filler(color_index)
     color_index += 1
@@ -347,7 +350,7 @@ def get_as_segments_blocks(pattern, chart, adjust_x, adjust_y):
         yield (block, color_code, flag)
 
 
-def write_pes_embsewseg_segments(f, pattern, chart, left, bottom, cx, cy):
+def write_pes_embsewseg_segments(f: BinaryIO, pattern: EmbPattern, chart, left, bottom, cx, cy):
     section = 0
     colorlog = []
 

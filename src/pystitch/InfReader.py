@@ -1,8 +1,11 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
 from .ReadHelper import read_int_16be, read_int_32be
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     u0 = read_int_32be(f)
     u1 = read_int_32be(f)
     u2 = read_int_32be(f)

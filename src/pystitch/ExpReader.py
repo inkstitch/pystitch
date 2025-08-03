@@ -1,7 +1,10 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .ReadHelper import signed8
 
 
-def read_exp_stitches(f, out):
+def read_exp_stitches(f: BinaryIO, out: EmbPattern):
     while True:
         b = bytearray(f.read(2))
         if len(b) != 2:
@@ -37,5 +40,5 @@ def read_exp_stitches(f, out):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     read_exp_stitches(f, out)

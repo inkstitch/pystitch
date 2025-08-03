@@ -1,7 +1,10 @@
+from typing import BinaryIO
+
+from .EmbPattern import EmbPattern
 from .ReadHelper import read_int_32le, signed8
 
 
-def read_jpx_stitches(f, out):
+def read_jpx_stitches(f: BinaryIO, out: EmbPattern):
     while True:
         b = bytearray(f.read(2))
         if len(b) != 2:
@@ -31,7 +34,7 @@ def read_jpx_stitches(f, out):
     out.end()
 
 
-def read(f, out, settings=None):
+def read(f: BinaryIO, out: EmbPattern, settings=None):
     stitch_start_position = read_int_32le(f)
     f.seek(0x1C, 1)
     colors = read_int_32le(f)
