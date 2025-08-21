@@ -256,7 +256,7 @@ def write_stitches_block(f: BinaryIO, stitches, first_pos_x, first_pos_y):
             # It moves to the relevant location without needing to block the needlebar.
             continue
         dx = int(round(x - last_x))
-        dy = int((y - last_y))
+        dy = int(round(y - last_y))
         last_x += dx
         last_y += dy
         if flags == STITCH:
