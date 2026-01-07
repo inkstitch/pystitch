@@ -1,6 +1,6 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
+from ...core.pattern import EmbPattern
 
 
 MIT_SIZE_CONVERSION_RATIO = 2.0 / 1.0

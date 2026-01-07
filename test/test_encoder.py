@@ -107,7 +107,7 @@ class TestEmbpattern(unittest.TestCase):
 
     def test_transcode_to_self(self):
         pattern = get_shift_pattern()
-        from pystitch.EmbEncoder import Transcoder
+        from pystitch.encoding.encoder import Transcoder
         encoder = Transcoder()
         encoder.transcode(pattern, pattern)
         self.assertNotEqual(len(pattern.stitches), 0)

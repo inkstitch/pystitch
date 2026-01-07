@@ -1,7 +1,7 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .EmbConstant import *
+from ...core.pattern import EmbPattern
+from ...core.constants import *
 
 
 def read_u01_stitches(f: BinaryIO, out: EmbPattern):

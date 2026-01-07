@@ -1,10 +1,10 @@
 import math
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .EmbConstant import *
-from .EmbThreadShv import get_thread_set
-from .ReadHelper import (
+from ...core.pattern import EmbPattern
+from ...core.constants import *
+from ...threads.shv import get_thread_set
+from ..read_helper import (
     read_int_8,
     read_int_16be,
     read_int_32be,

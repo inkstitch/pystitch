@@ -11,9 +11,9 @@ increasing Y is downwards, which is contrary to most embroidery.
 import sys
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .EmbFunctions import *
-from .WriteHelper import write_string_utf8
+from ...core.pattern import EmbPattern
+from ...core.functions import *
+from ..write_helper import write_string_utf8
 
 
 def write(pattern: EmbPattern, f: BinaryIO, settings=None):

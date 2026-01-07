@@ -1,8 +1,8 @@
 from typing import BinaryIO
 
-from .EmbFunctions import *
-from .EmbPattern import EmbPattern
-from .WriteHelper import write_string_utf8
+from ...core.functions import *
+from ...core.pattern import EmbPattern
+from ..write_helper import write_string_utf8
 
 SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_STITCH
 SCALE = (-1, -1)  # This performs a default X,Y flip.

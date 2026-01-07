@@ -1,7 +1,7 @@
 import re
 from typing import TextIO
 
-from .EmbPattern import EmbPattern
+from ...core.pattern import EmbPattern
 
 READ_FILE_IN_TEXT_MODE = True
 

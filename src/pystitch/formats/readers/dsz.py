@@ -1,7 +1,7 @@
 from typing import BinaryIO
 
-from .DstReader import dst_read_header
-from .EmbPattern import EmbPattern
+from .dst import dst_read_header
+from ...core.pattern import EmbPattern
 
 
 def z_stitch_encoding_read(f: BinaryIO, out: EmbPattern):

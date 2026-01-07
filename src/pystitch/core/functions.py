@@ -1,4 +1,4 @@
-from .EmbConstant import *
+from .constants import *
 
 
 def encode_thread_change(command, thread=None, needle=None, order=None):

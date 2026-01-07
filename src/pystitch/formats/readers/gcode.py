@@ -1,6 +1,6 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
+from ...core.pattern import EmbPattern
 
 
 def parse(f: BinaryIO):

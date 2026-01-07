@@ -1,9 +1,9 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .EmbThreadPec import get_thread_set
-from .PecReader import read_pec_stitches
-from .ReadHelper import read_int_8, read_int_16le, read_int_32le
+from ...core.pattern import EmbPattern
+from ...threads.pec import get_thread_set
+from .pec import read_pec_stitches
+from ..read_helper import read_int_8, read_int_16le, read_int_32le
 
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):

@@ -3,9 +3,9 @@ import zlib
 from typing import BinaryIO
 from math import sqrt
 
-from .EmbPattern import EmbPattern
-from .EmbConstant import *
-from .EmbThread import EmbThread
+from ...core.pattern import EmbPattern
+from ...core.constants import *
+from ...core.thread import EmbThread
 
 SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_STITCH
 FULL_JUMP = True

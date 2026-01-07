@@ -3,8 +3,8 @@ from __future__ import print_function
 import unittest
 
 from pystitch import *
-from pystitch.EmbThreadPec import *
-from pystitch.EmbThread import build_unique_palette, build_nonrepeat_palette, build_palette
+from pystitch.threads.pec import get_thread_set
+from pystitch.core.thread import build_unique_palette, build_nonrepeat_palette, build_palette
 
 
 class TestPalettes(unittest.TestCase):

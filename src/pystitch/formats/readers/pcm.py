@@ -1,7 +1,7 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .ReadHelper import read_int_8, read_int_16be, read_int_24be, signed24
+from ...core.pattern import EmbPattern
+from ..read_helper import read_int_8, read_int_16be, read_int_24be, signed24
 
 PC_SIZE_CONVERSION_RATIO = 5.0 / 3.0
 

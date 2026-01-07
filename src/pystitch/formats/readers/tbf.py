@@ -1,8 +1,8 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .EmbThread import EmbThread
-from .ReadHelper import read_int_8, read_int_24be, signed8, read_string_8
+from ...core.pattern import EmbPattern
+from ...core.thread import EmbThread
+from ..read_helper import read_int_8, read_int_24be, signed8, read_string_8
 
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):

@@ -1,8 +1,8 @@
 from typing import BinaryIO
 
-from .EmbFunctions import *
-from .EmbPattern import EmbPattern
-from .EmbThread import EmbThread
+from ...core.functions import *
+from ...core.pattern import EmbPattern
+from ...core.thread import EmbThread
 
 
 def decoded_command(command_dict, name):

@@ -1,5 +1,5 @@
 from typing import BinaryIO
-from .EmbPattern import EmbPattern
+from ...core.pattern import EmbPattern
 
 
 def read_10o_sttiches(f: BinaryIO, out: EmbPattern):

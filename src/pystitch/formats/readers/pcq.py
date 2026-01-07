@@ -1,8 +1,8 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .EmbThread import EmbThread
-from .ReadHelper import (
+from ...core.pattern import EmbPattern
+from ...core.thread import EmbThread
+from ..read_helper import (
     read_int_8,
     read_int_16le,
     read_int_24be,

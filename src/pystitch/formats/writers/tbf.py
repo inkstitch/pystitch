@@ -1,9 +1,9 @@
 from typing import BinaryIO
 
-from . import decode_embroidery_command
-from .EmbPattern import EmbPattern
-from .EmbConstant import *
-from .WriteHelper import write_string_utf8, write_int_8
+from ...core.functions import decode_embroidery_command
+from ...core.pattern import EmbPattern
+from ...core.constants import *
+from ..write_helper import write_string_utf8, write_int_8
 
 FULL_JUMP = False
 ROUND = True

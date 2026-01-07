@@ -1,6 +1,6 @@
 from typing import BinaryIO
-from .EmbConstant import FAST, SLOW
-from .EmbPattern import EmbPattern
+from ...core.constants import FAST, SLOW
+from ...core.pattern import EmbPattern
 
 
 def read_barudan_dat(f: BinaryIO, out: EmbPattern):

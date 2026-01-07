@@ -1,13 +1,13 @@
 import re
 from typing import BinaryIO
 
-from .EmbConstant import *
-from .EmbPattern import EmbPattern
-from .EmbThread import build_unique_palette
-from .EmbThreadPec import get_thread_set
-from .PecGraphics import draw_scaled, get_blank
-from .exceptions import TooManyColorChangesError
-from .WriteHelper import (
+from ...core.constants import *
+from ...core.pattern import EmbPattern
+from ...core.thread import build_unique_palette
+from ...threads.pec import get_thread_set
+from ...graphics.pec import draw_scaled, get_blank
+from ...exceptions import TooManyColorChangesError
+from ..write_helper import (
     write_int_8,
     write_int_16le,
     write_int_24le,

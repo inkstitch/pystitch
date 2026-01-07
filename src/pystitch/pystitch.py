@@ -1,6 +1,6 @@
 import os.path
 
-from .EmbPattern import EmbPattern
+from .core.pattern import EmbPattern
 
 get_extension_by_filename = EmbPattern.get_extension_by_filename
 

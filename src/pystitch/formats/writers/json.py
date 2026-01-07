@@ -1,7 +1,7 @@
 from typing import TextIO
 
-from .EmbFunctions import *
-from .EmbPattern import EmbPattern
+from ...core.functions import *
+from ...core.pattern import EmbPattern
 
 ENCODE = False
 WRITE_FILE_IN_TEXT_MODE = True

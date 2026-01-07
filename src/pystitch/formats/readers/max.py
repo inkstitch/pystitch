@@ -1,7 +1,7 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .ReadHelper import read_int_8, read_int_24le, read_int_32le, signed24
+from ...core.pattern import EmbPattern
+from ..read_helper import read_int_8, read_int_24le, read_int_32le, signed24
 
 MAX_SIZE_CONVERSION_RATIO = 1.235
 

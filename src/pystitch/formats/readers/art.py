@@ -1,4 +1,4 @@
-# from .ReadHelper import read_int_8
+# from ..read_helper import read_int_8
 # from io import BytesIO
 #
 # import compoundfiles

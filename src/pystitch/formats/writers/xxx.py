@@ -1,8 +1,8 @@
 from typing import BinaryIO
 
-from .EmbConstant import *
-from .EmbPattern import EmbPattern
-from .WriteHelper import write_int_8, write_int_16le, write_int_32le
+from ...core.constants import *
+from ...core.pattern import EmbPattern
+from ..write_helper import write_int_8, write_int_16le, write_int_32le
 
 FULL_JUMP = False
 ROUND = True

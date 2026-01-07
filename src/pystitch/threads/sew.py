@@ -1,4 +1,4 @@
-from .EmbThread import EmbThread
+from ..core.thread import EmbThread
 
 
 def get_thread_set():

@@ -1,10 +1,10 @@
 import math
 from typing import BinaryIO
 
-from .EmbFunctions import *
-from .EmbPattern import EmbPattern
-from .PecGraphics import get_graphic_as_string
-from .WriteHelper import write_string_utf8
+from ...core.functions import *
+from ...core.pattern import EmbPattern
+from ...graphics.pec import get_graphic_as_string
+from ..write_helper import write_string_utf8
 
 ENCODE = False
 WRITES_SPEEDS = True

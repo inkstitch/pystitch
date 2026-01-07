@@ -1,91 +1,105 @@
 name = "pystitch"
 
-# items available at the top level (e.g. pystitch.read)
-from .EmbConstant import *
-from .EmbFunctions import *
-from .EmbMatrix import EmbMatrix
-from .EmbPattern import EmbPattern
-from .EmbThread import EmbThread
-from .EmbCompress import compress, expand
-import pystitch.GenericWriter as GenericWriter
+# Core data structures (new paths)
+from .core.constants import *
+from .core.functions import *
+from .core.matrix import EmbMatrix
+from .core.pattern import EmbPattern
+from .core.thread import EmbThread
 
-# items available in a sub-heirarchy (e.g. pystitch.PecGraphics.get_graphic_as_string)
-from .PecGraphics import get_graphic_as_string
+# Encoding utilities
+from .encoding.compress import compress, expand
+
+# Graphics
+from .graphics.pec import get_graphic_as_string
+
+# Formats - generic writer
+from .formats import generic as GenericWriter
+
+# Miscellaneous
 from .pystitch import *
 
-import pystitch.A10oReader as A10oReader
-import pystitch.A100Reader as A100Reader
-# pystitch.ArtReader as ArtReader
-import pystitch.BroReader as BroReader
-import pystitch.ColReader as ColReader
-import pystitch.ColWriter as ColWriter
-import pystitch.CsvReader as CsvReader
-import pystitch.CsvWriter as CsvWriter
-import pystitch.DatReader as DatReader
-import pystitch.DsbReader as DsbReader
-import pystitch.DstReader as DstReader
-import pystitch.DstWriter as DstWriter
-import pystitch.DszReader as DszReader
-import pystitch.EdrReader as EdrReader
-import pystitch.EdrWriter as EdrWriter
-import pystitch.EmdReader as EmdReader
-import pystitch.ExpReader as ExpReader
-import pystitch.ExpWriter as ExpWriter
-import pystitch.ExyReader as ExyReader
-import pystitch.FxyReader as FxyReader
-import pystitch.GcodeReader as GcodeReader
-import pystitch.GcodeWriter as GcodeWriter
-import pystitch.InkstitchGcodeWriter as InkstitchGcodeWriter
-import pystitch.GtReader as GtReader
-import pystitch.HusReader as HusReader
-import pystitch.InbReader as InbReader
-import pystitch.InfReader as InfReader
-import pystitch.InfWriter as InfWriter
-import pystitch.IqpReader as IqpReader
-import pystitch.JefReader as JefReader
-import pystitch.JefWriter as JefWriter
-import pystitch.JpxReader as JpxReader
-import pystitch.JsonReader as JsonReader
-import pystitch.JsonWriter as JsonWriter
-import pystitch.KsmReader as KsmReader
-import pystitch.MaxReader as MaxReader
-import pystitch.MitReader as MitReader
-import pystitch.NewReader as NewReader
-import pystitch.PcdReader as PcdReader
-import pystitch.PcmReader as PcmReader
-import pystitch.PcqReader as PcqReader
-import pystitch.PcsReader as PcsReader
-import pystitch.PecReader as PecReader
-import pystitch.PecWriter as PecWriter
-import pystitch.PesReader as PesReader
-import pystitch.PesWriter as PesWriter
-import pystitch.PhbReader as PhbReader
-import pystitch.PhcReader as PhcReader
-import pystitch.PltReader as PltReader
-import pystitch.PltWriter as PltWriter
-import pystitch.PmvReader as PmvReader
-import pystitch.PmvWriter as PmvWriter
-import pystitch.PngWriter as PngWriter
-import pystitch.QccReader as QccReader
-import pystitch.QccWriter as QccWriter
-import pystitch.SewReader as SewReader
-import pystitch.ShvReader as ShvReader
-import pystitch.SpxReader as SpxReader
-import pystitch.StcReader as StcReader
-import pystitch.StxReader as StxReader
-import pystitch.SvgWriter as SvgWriter
-import pystitch.TapReader as TapReader
-import pystitch.TbfReader as TbfReader
-import pystitch.TbfWriter as TbfWriter
-import pystitch.TxtWriter as TxtWriter
-import pystitch.U01Reader as U01Reader
-import pystitch.U01Writer as U01Writer
-import pystitch.Vp3Reader as Vp3Reader
-import pystitch.Vp3Writer as Vp3Writer
-import pystitch.XxxReader as XxxReader
-import pystitch.XxxWriter as XxxWriter
-import pystitch.ZhsReader as ZhsReader
-import pystitch.ZxyReader as ZxyReader
+# ============================================================
+# Backward compatible aliases for readers
+# Format: pystitch.XxxReader -> pystitch.formats.readers.xxx
+# ============================================================
+from .formats.readers import a10o as A10oReader
+from .formats.readers import a100 as A100Reader
+from .formats.readers import bro as BroReader
+from .formats.readers import col as ColReader
+from .formats.readers import csv as CsvReader
+from .formats.readers import dat as DatReader
+from .formats.readers import dsb as DsbReader
+from .formats.readers import dst as DstReader
+from .formats.readers import dsz as DszReader
+from .formats.readers import edr as EdrReader
+from .formats.readers import emd as EmdReader
+from .formats.readers import exp as ExpReader
+from .formats.readers import exy as ExyReader
+from .formats.readers import fxy as FxyReader
+from .formats.readers import gcode as GcodeReader
+from .formats.readers import gt as GtReader
+from .formats.readers import hus as HusReader
+from .formats.readers import inb as InbReader
+from .formats.readers import inf as InfReader
+from .formats.readers import iqp as IqpReader
+from .formats.readers import jef as JefReader
+from .formats.readers import jpx as JpxReader
+from .formats.readers import json as JsonReader
+from .formats.readers import ksm as KsmReader
+from .formats.readers import max as MaxReader
+from .formats.readers import mit as MitReader
+from .formats.readers import new as NewReader
+from .formats.readers import pcd as PcdReader
+from .formats.readers import pcm as PcmReader
+from .formats.readers import pcq as PcqReader
+from .formats.readers import pcs as PcsReader
+from .formats.readers import pec as PecReader
+from .formats.readers import pes as PesReader
+from .formats.readers import phb as PhbReader
+from .formats.readers import phc as PhcReader
+from .formats.readers import plt as PltReader
+from .formats.readers import pmv as PmvReader
+from .formats.readers import qcc as QccReader
+from .formats.readers import sew as SewReader
+from .formats.readers import shv as ShvReader
+from .formats.readers import spx as SpxReader
+from .formats.readers import stc as StcReader
+from .formats.readers import stx as StxReader
+from .formats.readers import tap as TapReader
+from .formats.readers import tbf as TbfReader
+from .formats.readers import u01 as U01Reader
+from .formats.readers import vp3 as Vp3Reader
+from .formats.readers import xxx as XxxReader
+from .formats.readers import zhs as ZhsReader
+from .formats.readers import zxy as ZxyReader
+
+# ============================================================
+# Backward compatible aliases for writers
+# Format: pystitch.XxxWriter -> pystitch.formats.writers.xxx
+# ============================================================
+from .formats.writers import col as ColWriter
+from .formats.writers import csv as CsvWriter
+from .formats.writers import dst as DstWriter
+from .formats.writers import edr as EdrWriter
+from .formats.writers import exp as ExpWriter
+from .formats.writers import gcode as GcodeWriter
+from .formats.writers import inkstitchgcode as InkstitchGcodeWriter
+from .formats.writers import inf as InfWriter
+from .formats.writers import jef as JefWriter
+from .formats.writers import json as JsonWriter
+from .formats.writers import pec as PecWriter
+from .formats.writers import pes as PesWriter
+from .formats.writers import plt as PltWriter
+from .formats.writers import pmv as PmvWriter
+from .formats.writers import png as PngWriter
+from .formats.writers import qcc as QccWriter
+from .formats.writers import svg as SvgWriter
+from .formats.writers import tbf as TbfWriter
+from .formats.writers import txt as TxtWriter
+from .formats.writers import u01 as U01Writer
+from .formats.writers import vp3 as Vp3Writer
+from .formats.writers import xxx as XxxWriter
 
 
 def read(filename, settings=None, pattern=None):

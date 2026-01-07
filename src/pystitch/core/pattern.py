@@ -1,8 +1,8 @@
 import os
 
-from .EmbEncoder import Transcoder as Normalizer
-from .EmbFunctions import *
-from .EmbThread import EmbThread
+from ..encoding.encoder import Transcoder as Normalizer
+from .functions import *
+from .thread import EmbThread
 
 
 class EmbPattern:

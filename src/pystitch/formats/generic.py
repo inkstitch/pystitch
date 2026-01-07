@@ -18,8 +18,8 @@ from pystitch import (
     get_common_name_dictionary,
     COMMAND_MASK,
 )
-from .EmbPattern import EmbPattern
-from pystitch.WriteHelper import write_string_utf8
+from ..core.pattern import EmbPattern
+from .write_helper import write_string_utf8
 
 WRITES_SPEEDS = True
 SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_UTILIZE

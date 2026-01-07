@@ -1,7 +1,7 @@
 import math
 
-from .EmbFunctions import *
-from .EmbMatrix import EmbMatrix
+from ..core.functions import *
+from ..core.matrix import EmbMatrix
 
 
 class Transcoder:

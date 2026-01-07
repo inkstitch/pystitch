@@ -1,10 +1,10 @@
 from typing import BinaryIO
 
-from .EmbConstant import *
-from .EmbPattern import EmbPattern
-from .EmbThreadPec import get_thread_set
-from .PecWriter import write_pec
-from .WriteHelper import (
+from ...core.constants import *
+from ...core.pattern import EmbPattern
+from ...threads.pec import get_thread_set
+from .pec import write_pec
+from ..write_helper import (
     write_float_32le,
     write_int_8,
     write_int_16le,

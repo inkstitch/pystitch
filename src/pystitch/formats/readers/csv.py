@@ -1,6 +1,6 @@
 from typing import TextIO
-from .EmbPattern import EmbPattern
-from .EmbFunctions import *
+from ...core.pattern import EmbPattern
+from ...core.functions import *
 
 READ_FILE_IN_TEXT_MODE = True
 

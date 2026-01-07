@@ -1,8 +1,8 @@
 from typing import BinaryIO
 
-from .EmbConstant import *
-from .EmbPattern import EmbPattern
-from .WriteHelper import (
+from ...core.constants import *
+from ...core.pattern import EmbPattern
+from ..write_helper import (
     write_int_8,
     write_int_16be,
     write_int_24be,

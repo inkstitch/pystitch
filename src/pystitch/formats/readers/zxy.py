@@ -1,7 +1,7 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .ReadHelper import read_int_16be
+from ...core.pattern import EmbPattern
+from ..read_helper import read_int_16be
 
 
 def read_zxy_stitches(f: BinaryIO, out: EmbPattern):

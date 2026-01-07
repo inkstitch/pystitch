@@ -1,8 +1,8 @@
 from typing import BinaryIO
 
-from .EmbConstant import *
-from .EmbPattern import EmbPattern
-from .WriteHelper import write_string_utf8
+from ...core.constants import *
+from ...core.pattern import EmbPattern
+from ..write_helper import write_string_utf8
 
 SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_UTILIZE
 FULL_JUMP = False

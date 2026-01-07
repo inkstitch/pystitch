@@ -1,7 +1,7 @@
 from typing import BinaryIO
 
-from .EmbPattern import EmbPattern
-from .WriteHelper import write_int_8
+from ...core.pattern import EmbPattern
+from ..write_helper import write_int_8
 
 ENCODE = False
 
