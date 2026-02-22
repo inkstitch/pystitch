@@ -3,13 +3,18 @@ from typing import BinaryIO
 from .EmbCompress import expand
 from .EmbPattern import EmbPattern
 from .EmbThreadHus import get_thread_set
-from .ReadHelper import read_int_16le, read_int_32le, read_string_8, signed8, signed16
+from .exceptions import NoStitchesError
+from .ReadHelper import (read_int_16le, read_int_32le, read_string_8, signed8,
+                         signed16)
 
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     magic_code = read_int_32le(f)
     number_of_stitches = read_int_32le(f)
     number_of_colors = read_int_32le(f)
+
+    if number_of_stitches == 0:
+        raise NoStitchesError('No stitches found, the file appears to be corrupted.')
 
     extend_pos_x = signed16(read_int_16le(f))
     extend_pos_y = signed16(read_int_16le(f))
