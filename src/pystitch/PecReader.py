@@ -2,6 +2,7 @@ from typing import BinaryIO
 
 from .EmbPattern import EmbPattern
 from .EmbThreadPec import get_thread_set
+from .exceptions import NoStitchesError
 from .ReadHelper import read_int_8, read_int_24le, read_string_8
 
 JUMP_CODE = 0x10
@@ -26,6 +27,8 @@ def read_pec(f: BinaryIO, out: EmbPattern, pes_chart=None):
     pec_graphic_icon_height = read_int_8(f)
     f.seek(0xC, 1)
     color_changes = read_int_8(f)
+    if color_changes is None:
+        raise NoStitchesError("Cannot find any colors. Please ensure that this file contains embroidery information.")
     count_colors = color_changes + 1  # PEC uses cc - 1, 0xFF means 0.
     color_bytes = bytearray(f.read(count_colors))
     threads = []

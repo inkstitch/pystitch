@@ -1,6 +1,8 @@
 from typing import TextIO
-from .EmbPattern import EmbPattern
+
 from .EmbFunctions import *
+from .EmbPattern import EmbPattern
+from .exceptions import NoStitchesError
 
 READ_FILE_IN_TEXT_MODE = True
 
@@ -13,9 +15,12 @@ def read(f: TextIO, out: EmbPattern, settings=None):
     for row in csv_reader:
         if len(row) == 0:
             continue
-        if "*" in row[0]:
+        if "*" in row[0] and len(row) > 2:
             split = row[2].split(" ")
-            command = command_dict[split[0]]
+            try:
+                command = command_dict[split[0]]
+            except KeyError:
+                continue
             for sp in split[1:]:
                 if sp[0] == "n":
                     needle = int(sp[1:])
@@ -75,3 +80,5 @@ def read(f: TextIO, out: EmbPattern, settings=None):
                 except IndexError:
                     pass
             out.add_thread(thread_add)
+    if not out.stitches:
+        raise NoStitchesError("Cannot find any stitches. Please ensure that this file contains embroidery information.")

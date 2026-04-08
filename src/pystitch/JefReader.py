@@ -2,6 +2,7 @@ from typing import BinaryIO
 
 from .EmbPattern import EmbPattern
 from .EmbThreadJef import get_thread_set
+from .exceptions import NoStitchesError
 from .ReadHelper import read_int_32le, signed8
 
 
@@ -70,7 +71,12 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(88, 1)
 
     for i in range(0, count_colors):
-        index = abs(read_int_32le(f))
+        index = read_int_32le(f)
+        if index:
+            index = abs(index)
+        else:
+            # color count doesn't match
+            break
         if index == 0:
             # Patch: If we have color 0. Go ahead and set that to None.
             out.threadlist.append(None)

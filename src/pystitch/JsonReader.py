@@ -3,6 +3,7 @@ from typing import BinaryIO
 from .EmbFunctions import *
 from .EmbPattern import EmbPattern
 from .EmbThread import EmbThread
+from .exceptions import NoStitchesError
 
 
 def decoded_command(command_dict, name):
@@ -26,7 +27,10 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
 
     json_object = json.load(f)
     command_dict = get_command_dictionary()
-    stitches = json_object["stitches"]
+    try:
+        stitches = json_object["stitches"]
+    except KeyError:
+        raise NoStitchesError("Cannot find any stitches. Please ensure that this file contains embroidery information.")
     extras = json_object["extras"]
     threadlist = json_object["threadlist"]
     for t in threadlist:
