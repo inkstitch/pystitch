@@ -1,4 +1,5 @@
 import math
+from typing import Any
 
 from .EmbFunctions import *
 from .EmbMatrix import EmbMatrix
@@ -67,12 +68,12 @@ class Transcoder:
         rotate = settings.get("rotate", None)
         if rotate is not None:
             self.matrix.post_rotate(rotate)
-        self.source_pattern = None
-        self.destination_pattern = None
+        self.source_pattern: Any = None
+        self.destination_pattern: Any = None
         self.position = 0
         self.order_index = -1
         self.change_sequence = {}
-        self.stitch = None
+        self.stitch: Any = None
         self.state_trimmed = True
         self.state_sequin_mode = False
         self.state_jumping = False
@@ -122,7 +123,7 @@ class Transcoder:
 
     def build_thread_change_sequence(self):
         """Builds a change sequence to plan out all the color changes for the file."""
-        change_sequence = {}
+        change_sequence: dict[int, list[Any]] = {}
         lookahead_index = 0
         change_sequence[0] = [None, None, None, None]
         for (
@@ -137,7 +138,7 @@ class Transcoder:
                     try:
                         current = change_sequence[lookahead_index]
                     except KeyError:
-                        current = [None, None, None, None]
+                        current: list[Any] = [None, None, None, None]
                         change_sequence[lookahead_index] = current
                     lookahead_index += 1
                 else:
@@ -147,10 +148,11 @@ class Transcoder:
                         current = [None, None, None, None]
                         change_sequence[order] = current
             else:
+                assert current_index is not None
                 try:
                     current = change_sequence[current_index]
                 except KeyError:
-                    current = [None, None, None, None]
+                    current: list[Any] = [None, None, None, None]
                     change_sequence[current_index] = current
                 if current_index >= lookahead_index:
                     lookahead_index = current_index + 1
@@ -197,20 +199,35 @@ class Transcoder:
         if self.thread_change_command == NEEDLE_SET:
             self.destination_pattern.threadlist.extend(self.source_pattern.threadlist)
 
+        # Cache matrix coefficients and constants for the hot loop
+        m = self.matrix.m
+        m0, m1, m3, m4, m6, m7 = m[0], m[1], m[3], m[4], m[6], m[7]
+        _round_flag = self.round
+        _round = round
+        _COMMAND_MASK = COMMAND_MASK
+        _FLAGS_MASK = FLAGS_MASK
+        _NO_COMMAND = NO_COMMAND
+        _STITCH = STITCH
+        _NEEDLE_AT = NEEDLE_AT
+        _SEW_TO = SEW_TO
+        _STITCH_FLAG = STITCH  # For inlined stitch_at
+        _dest_stitches = self.destination_pattern.stitches
+
         flags = NO_COMMAND
         for self.position, self.stitch in enumerate(source):
-            p = self.matrix.point_in_matrix_space(self.stitch)
-            x = p[0]
-            y = p[1]
-            if self.round:
-                x = round(x)
-                y = round(y)
-            flags = self.stitch[2] & COMMAND_MASK
-            self.high_flags = self.stitch[2] & FLAGS_MASK
+            s0 = self.stitch[0]
+            s1 = self.stitch[1]
+            x = s0 * m0 + s1 * m3 + m6
+            y = s0 * m1 + s1 * m4 + m7
+            if _round_flag:
+                x = _round(x)
+                y = _round(y)
+            flags = self.stitch[2] & _COMMAND_MASK
+            self.high_flags = self.stitch[2] & _FLAGS_MASK
 
-            if flags == NO_COMMAND:
+            if flags == _NO_COMMAND:
                 continue
-            elif flags == STITCH:
+            elif flags == _STITCH:
                 if self.state_trimmed:
                     self.declare_not_trimmed()
                     self.jump_to_within_stitchrange(x, y)
@@ -221,7 +238,7 @@ class Transcoder:
                     self.state_jumping = False
                 else:
                     self.stitch_with_contingency(x, y)
-            elif flags == NEEDLE_AT:
+            elif flags == _NEEDLE_AT:
                 if self.state_trimmed:
                     self.declare_not_trimmed()
                     self.jump_to_within_stitchrange(x, y)
@@ -231,8 +248,18 @@ class Transcoder:
                     self.needle_to(x, y)
                     self.state_jumping = False
                 else:
-                    self.needle_to(x, y)
-            elif flags == SEW_TO:
+                    # Fast path: inline needle_to + stitch_at for common case
+                    nx = self.needle_x
+                    ny = self.needle_y
+                    ml = self.max_stitch
+                    if abs(x - nx) <= ml and abs(y - ny) <= ml:
+                        # No gap stitches needed - inline add + update
+                        _dest_stitches.append([x, y, _STITCH_FLAG | self.high_flags])
+                        self.needle_x = x
+                        self.needle_y = y
+                    else:
+                        self.needle_to(x, y)
+            elif flags == _SEW_TO:
                 if self.state_trimmed:
                     self.declare_not_trimmed()
                     self.jump_to_within_stitchrange(x, y)

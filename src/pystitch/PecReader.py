@@ -10,7 +10,7 @@ FLAG_LONG = 0x80
 
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):
-    pec_string = read_string_8(f, 8)
+    read_string_8(f, 8)
     # pec_string must equal #PEC0001
     read_pec(f, out)
     out.interpolate_duplicate_color_as_stop()
@@ -114,47 +114,68 @@ def signed7(b):
 
 
 def read_pec_stitches(f: BinaryIO, out: EmbPattern):
-    while True:
-        val1 = read_int_8(f)
-        val2 = read_int_8(f)
+    # Bulk-read all remaining stitch data at once
+    raw = f.read()
+    data_len = len(raw)
+    if data_len < 2:
+        out.end()
+        return
+
+    # Local references for speed
+    stitch = out.stitch
+    move = out.move
+    trim = out.trim
+    color_change = out.color_change
+
+    offset = 0
+    while offset < data_len - 1:
+        val1 = raw[offset]
+        val2 = raw[offset + 1]
+        offset += 2
+
         if (val1 == 0xFF and val2 == 0x00) or val2 is None:
             break
         if val1 == 0xFE and val2 == 0xB0:
-            f.seek(1, 1)
-            out.color_change(0, 0)
+            offset += 1  # skip 1 byte
+            color_change(0, 0)
             continue
+
         jump = False
-        trim = False
+        trim_flag = False
+
         if val1 & FLAG_LONG != 0:
             if val1 & TRIM_CODE != 0:
-                trim = True
+                trim_flag = True
             if val1 & JUMP_CODE != 0:
                 jump = True
             code = (val1 << 8) | val2
             x = signed12(code)
-            val2 = read_int_8(f)
-            if val2 is None:
+            if offset >= data_len:
                 break
+            val2 = raw[offset]
+            offset += 1
         else:
             x = signed7(val1)
 
         if val2 & FLAG_LONG != 0:
             if val2 & TRIM_CODE != 0:
-                trim = True
+                trim_flag = True
             if val2 & JUMP_CODE != 0:
                 jump = True
-            val3 = read_int_8(f)
-            if val3 is None:
+            if offset >= data_len:
                 break
+            val3 = raw[offset]
+            offset += 1
             code = val2 << 8 | val3
             y = signed12(code)
         else:
             y = signed7(val2)
+
         if jump:
-            out.move(x, y)
-        elif trim:
-            out.trim()
-            out.move(x, y)
+            move(x, y)
+        elif trim_flag:
+            trim()
+            move(x, y)
         else:
-            out.stitch(x, y)
+            stitch(x, y)
     out.end()

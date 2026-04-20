@@ -1,3 +1,6 @@
+from typing import Any
+
+
 def expand(data, uncompressed_size=None):
     emb_compress = EmbCompress()
     return emb_compress.decompress(data, uncompressed_size)
@@ -14,8 +17,8 @@ def compress(data):
 class Huffman:
     def __init__(self, lengths=None, value=0):
         self.default_value = value
-        self.lengths = lengths
-        self.table = None
+        self.lengths: Any = lengths
+        self.table: Any = None
         self.table_width = 0
 
     def build_table(self):
@@ -42,10 +45,10 @@ class Huffman:
 class EmbCompress:
     def __init__(self):
         self.bit_position = 0
-        self.input_data = None
-        self.block_elements = None
-        self.character_huffman = None
-        self.distance_huffman = None
+        self.input_data: Any = None
+        self.block_elements: Any = None
+        self.character_huffman: Any = None
+        self.distance_huffman: Any = None
 
     def get_bits(self, start_pos_in_bits, length):
         end_pos_in_bits = start_pos_in_bits + length - 1

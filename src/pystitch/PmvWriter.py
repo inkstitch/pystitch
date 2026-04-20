@@ -15,7 +15,7 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     min_y = +200000000
     point_count = 0
     for stitch in pattern.stitches:
-        data = stitch[2]
+        data = stitch[2] & COMMAND_MASK
         x = stitch[0]
         y = -stitch[1]
         if data == STITCH or data == JUMP:
@@ -50,17 +50,18 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None):
 
     write_int_16le(f, point_count)
     write_int_16le(f, point_count * 2)
-    point_index = -1
+    written = 0
     max_x = -200000000
     min_x = +200000000
     max_y = -200000000
     min_y = +200000000
     xx = 0
     for stitch in pattern.stitches:
-        point_index += 1
-        if point_index >= point_count:
+        if written >= point_count:
             break
         data = stitch[2] & COMMAND_MASK
+        if data != STITCH and data != JUMP:
+            continue
         x = stitch[0]
         y = -stitch[1]
         x *= scale_x
@@ -69,23 +70,22 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None):
         y = int(round(y))
         x = int(round(x - xx))
         xx += x
-        if data == STITCH or data == JUMP:
-            if xx > max_x:
-                max_x = xx
-            if xx < min_x:
-                min_x = xx
-            if y > max_y:
-                max_y = y
-            if y < min_y:
-                min_y = y
+        if xx > max_x:
+            max_x = xx
+        if xx < min_x:
+            min_x = xx
+        if y > max_y:
+            max_y = y
+        if y < min_y:
+            min_y = y
 
-            if x < 0:
-                x += 64
-            if y < 0:
-                y += 32
-            write_int_8(f, x)
-            write_int_8(f, y)
-            continue
+        if x < 0:
+            x += 64
+        if y < 0:
+            y += 32
+        write_int_8(f, x)
+        write_int_8(f, y)
+        written += 1
     write_int_16le(f, 0)
     write_int_16le(f, 256)
     f.write(b"\x00\x00\x00\x00\x05\x00\x00\x00" b"\x00\x00\x00\x00\x00\x00\x02\x00")

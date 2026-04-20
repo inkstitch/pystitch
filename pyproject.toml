@@ -7,27 +7,23 @@ name = "pystitch"
 version = "1.0.0"
 dependencies = []
 requires-python = ">=3.9"
-authors = [
-  {name = "Tatarize"},
-]
-maintainers = [
-  {name = "Kaalleen"},
-]
+authors = [{ name = "Tatarize" }]
+maintainers = [{ name = "Kaalleen" }]
 description = "Embroidery IO library"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["embroidery", "file conversion"]
 classifiers = [
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Developers",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-	"Programming Language :: Python :: 3.11",
-	"Programming Language :: Python :: 3.12",
-	"Programming Language :: Python :: 3.13",
-        "Operating System :: OS Independent",
-        "Topic :: Software Development :: Libraries :: Python Modules"
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [project.urls]

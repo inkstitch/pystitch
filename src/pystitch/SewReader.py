@@ -20,7 +20,13 @@ def read_sew_stitches(f: BinaryIO, out: EmbPattern):
         if control & 1:
             out.color_change()
             continue
-        if control == 0x04 or control == 0x02:
+        if control == 0x02:
+            if b[0] == 0 and b[1] == 0:
+                out.trim()
+            else:
+                out.move(signed8(b[0]), -signed8(b[1]))
+            continue
+        if control == 0x04:
             out.move(signed8(b[0]), -signed8(b[1]))
             continue
         if control == 0x10:
@@ -40,3 +46,4 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
 
     f.seek(0x1D78, 0)
     read_sew_stitches(f, out)
+    out.interpolate_trims(3)

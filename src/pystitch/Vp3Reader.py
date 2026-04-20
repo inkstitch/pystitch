@@ -50,7 +50,7 @@ def signed16(b0, b1):
 
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):
-    b = f.read(6)
+    f.read(6)
     # magic code: %vsm%\0
     skip_vp3_string(f)  # "Produced by     Software Ltd"
     f.seek(7, 1)
@@ -71,7 +71,7 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
 
 
 def vp3_read_colorblock(f: BinaryIO, out: EmbPattern, center_x, center_y):
-    bytescheck = f.read(3)  # \x00\x05\x00
+    f.read(3)  # \x00\x05\x00
     distance_to_next_block_050 = read_int_32be(f)
     block_end_position = distance_to_next_block_050 + f.tell()
 
@@ -84,7 +84,7 @@ def vp3_read_colorblock(f: BinaryIO, out: EmbPattern, center_x, center_y):
     thread = vp3_read_thread(f)
     out.add_thread(thread)
     f.seek(15, 1)
-    bytescheck = f.read(3)  # \x0A\xF6\x00
+    f.read(3)  # \x0A\xF6\x00
     stitch_byte_length = block_end_position - f.tell()
     stitch_bytes = read_signed(f, stitch_byte_length)
     i = 0
@@ -113,13 +113,13 @@ def vp3_read_colorblock(f: BinaryIO, out: EmbPattern, center_x, center_y):
 def vp3_read_thread(f: BinaryIO):
     thread = EmbThread()
     colors = read_int_8(f)
-    transition = read_int_8(f)
+    _transition = read_int_8(f)
     for m in range(0, colors):
         thread.color = read_int_24be(f)
-        parts = read_int_8(f)
-        color_length = read_int_16be(f)
-    thread_type = read_int_8(f)
-    weight = read_int_8(f)
+        _parts = read_int_8(f)
+        _color_length = read_int_16be(f)
+    _thread_type = read_int_8(f)
+    _weight = read_int_8(f)
     thread.catalog_number = read_vp3_string_8(f)
     thread.description = read_vp3_string_8(f)
     thread.brand = read_vp3_string_8(f)

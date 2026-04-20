@@ -1,4 +1,3 @@
-import math
 from typing import BinaryIO
 from itertools import cycle
 
@@ -27,7 +26,7 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     custom_stitch = settings.get('custom_stitch', '')
     custom_jump = settings.get('custom_jump', '')
     custom_color_change = settings.get('custom_color_change', '')
-    custom_frameout = settings.get('custom_frameout', '')
+    settings.get('custom_frameout', '')
     custom_stop = settings.get('custom_stop', '')
     custom_start = settings.get('custom_start', '')
     custom_end = settings.get('custom_end', '')

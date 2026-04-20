@@ -1,18 +1,17 @@
 import os
 
-from .EmbEncoder import Transcoder as Normalizer
 from .EmbFunctions import *
 from .EmbThread import EmbThread
 
 
 class EmbPattern:
     def __init__(self, *args, **kwargs):
-        self.stitches = []  # type: list
-        self.threadlist = []  # type: list
-        self.extras = {}  # type: dict
+        self.stitches: list = []
+        self.threadlist: list = []
+        self.extras: dict = {}
         # filename, name, category, author, keywords, comments, are typical
-        self._previousX = 0  # type: float
-        self._previousY = 0  # type: float
+        self._previousX: float = 0
+        self._previousY: float = 0
         len_args = len(args)
         if len_args >= 1:
             arg0 = args[0]
@@ -72,7 +71,7 @@ class EmbPattern:
     def __deepcopy__(self):
         return self.copy()
 
-    def __iadd__(self, other):
+    def __iadd__(self, other) -> "EmbPattern":
         if isinstance(other, EmbPattern):
             self.add_pattern(other)
         elif isinstance(other, EmbThread) or isinstance(other, str):
@@ -86,7 +85,7 @@ class EmbPattern:
             self.add_command(other)
         elif isinstance(other, list) or isinstance(other, tuple):  # tuple or list
             if len(other) == 0:
-                return
+                return self
             v = other[0]
             if isinstance(v, list) or isinstance(
                 v, tuple
@@ -423,7 +422,7 @@ class EmbPattern:
         while len(self.threadlist) < thread_index:
             self.add_thread(self.get_thread_or_filler(len(self.threadlist)))
 
-    def add_stitch_absolute(self, cmd, x=0, y=0):
+    def add_stitch_absolute(self, cmd, x: float = 0, y: float = 0):
         """Add a command at the absolute location: x, y"""
         self.stitches.append([x, y, cmd])
         self._previousX = x
@@ -541,11 +540,13 @@ class EmbPattern:
             if dy is None:
                 dy = 0
             self.add_command(MATRIX_TRANSLATE, dx, dy)
-        if sx is not None or sx is not None:
+        if sx is not None or sy is not None:
             if sx is None:
                 sx = sy
             if sy is None:
                 sy = sx
+            assert sx is not None
+            assert sy is not None
             self.add_command(MATRIX_SCALE, sx, sy)
         if rotate is not None:
             self.add_command(MATRIX_ROTATE, rotate)
@@ -635,6 +636,7 @@ class EmbPattern:
             ):
                 if mode == 3:
                     del self.stitches[sequence_start_position:position]
+                    assert sequence_start_position is not None
                     position = sequence_start_position
                     self.stitches.insert(position, [stop_x, stop_y, FRAME_EJECT])
                     ie = len(self.stitches)
@@ -653,6 +655,7 @@ class EmbPattern:
             position += 1
         if mode >= 2:  # Frame_eject at end.
             del self.stitches[sequence_start_position:position]
+            assert sequence_start_position is not None
             position = sequence_start_position
             self.stitches.insert(position, [stop_x, stop_y, FRAME_EJECT])
 
@@ -785,6 +788,7 @@ class EmbPattern:
     def get_normalized_pattern(self, encode_settings=None):
         """Encodes pattern typically for saving."""
         normal_pattern = EmbPattern()
+        from .EmbEncoder import Transcoder as Normalizer
         transcoder = Normalizer(encode_settings)
         transcoder.transcode(self, normal_pattern)
         return normal_pattern
@@ -843,57 +847,57 @@ class EmbPattern:
             encode = True
 
         if settings.get("encode", encode):
-            if not ("max_jump" in settings):
+            if "max_jump" not in settings:
                 try:
                     settings["max_jump"] = writer.MAX_JUMP_DISTANCE
                 except AttributeError:
                     pass
-            if not ("max_stitch" in settings):
+            if "max_stitch" not in settings:
                 try:
                     settings["max_stitch"] = writer.MAX_STITCH_DISTANCE
                 except AttributeError:
                     pass
-            if not ("full_jump" in settings):
+            if "full_jump" not in settings:
                 try:
                     settings["full_jump"] = writer.FULL_JUMP
                 except AttributeError:
                     pass
-            if not ("round" in settings):
+            if "round" not in settings:
                 try:
                     settings["round"] = writer.ROUND
                 except AttributeError:
                     pass
-            if not ("writes_speeds" in settings):
+            if "writes_speeds" not in settings:
                 try:
                     settings["writes_speeds"] = writer.WRITES_SPEEDS
                 except AttributeError:
                     pass
-            if not ("sequin_contingency" in settings):
+            if "sequin_contingency" not in settings:
                 try:
                     settings["sequin_contingency"] = writer.SEQUIN_CONTINGENCY
                 except AttributeError:
                     pass
-            if not ("thread_change_command" in settings):
+            if "thread_change_command" not in settings:
                 try:
                     settings["thread_change_command"] = writer.THREAD_CHANGE_COMMAND
                 except AttributeError:
                     pass
-            if not ("explicit_trim" in settings):
+            if "explicit_trim" not in settings:
                 try:
                     settings["explicit_trim"] = writer.EXPLICIT_TRIM
                 except AttributeError:
                     pass
-            if not ("translate" in settings):
+            if "translate" not in settings:
                 try:
                     settings["translate"] = writer.TRANSLATE
                 except AttributeError:
                     pass
-            if not ("scale" in settings):
+            if "scale" not in settings:
                 try:
                     settings["scale"] = writer.SCALE
                 except AttributeError:
                     pass
-            if not ("rotate" in settings):
+            if "rotate" not in settings:
                 try:
                     settings["rotate"] = writer.ROTATE
                 except AttributeError:

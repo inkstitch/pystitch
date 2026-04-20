@@ -316,8 +316,8 @@ def draw_scaled(extends, points, graphic, stride, buffer=5):
 
 
 def clear(graphic):
-    for b in graphic:
-        b = 0
+    for i in range(len(graphic)):
+        graphic[i] = 0
 
 
 def graphic_mark_bit(graphic, x, y, stride=6):
@@ -338,7 +338,7 @@ def get_graphic_as_string(graphic, one="#", zero=" "):
         graphic = graphic[0]
 
     if isinstance(graphic, str):
-        graphic = bytearray(graphic)
+        graphic = bytearray(graphic, 'latin-1')
 
     list_string = [
         one if (byte >> i) & 1 else zero for byte in graphic for i in range(0, 8)

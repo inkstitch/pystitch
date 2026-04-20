@@ -42,4 +42,5 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None):
             f.write(b"\x80\x01\x00\x00")
             continue
         elif data == END:
-            pass
+            f.write(b"\x80\x10")
+            break

@@ -46,3 +46,4 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
         out.add_thread({"color": "random", "name": "JPX index " + str(color_index)})
     f.seek(stitch_start_position, 0)
     read_jpx_stitches(f, out)
+    out.interpolate_trims(3)

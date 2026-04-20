@@ -109,3 +109,4 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
     read_zhs_header(f, out)
     f.seek(stitch_start_position, 0)
     read_zhs_stitches(f, out)
+    out.interpolate_trims(3)

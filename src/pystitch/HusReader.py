@@ -9,25 +9,25 @@ from .ReadHelper import (read_int_16le, read_int_32le, read_string_8, signed8,
 
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):
-    magic_code = read_int_32le(f)
+    _magic_code = read_int_32le(f)
     number_of_stitches = read_int_32le(f)
     number_of_colors = read_int_32le(f)
 
     if number_of_stitches == 0:
         raise NoStitchesError('No stitches found, the file appears to be corrupted.')
 
-    extend_pos_x = signed16(read_int_16le(f))
-    extend_pos_y = signed16(read_int_16le(f))
-    extend_neg_x = signed16(read_int_16le(f))
-    extend_neg_y = signed16(read_int_16le(f))
+    _extend_pos_x = signed16(read_int_16le(f))
+    _extend_pos_y = signed16(read_int_16le(f))
+    _extend_neg_x = signed16(read_int_16le(f))
+    _extend_neg_y = signed16(read_int_16le(f))
 
     command_offset = read_int_32le(f)
     x_offset = read_int_32le(f)
     y_offset = read_int_32le(f)
 
-    string_value = read_string_8(f, 8)
+    _string_value = read_string_8(f, 8)
 
-    unknown_16_bit = read_int_16le(f)
+    _unknown_16_bit = read_int_16le(f)
 
     hus_thread_set = get_thread_set()
     for i in range(0, number_of_colors):

@@ -35,3 +35,4 @@ def read_inb_stitches(f: BinaryIO, out: EmbPattern):
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x2000, 0)
     read_inb_stitches(f, out)
+    out.interpolate_trims(3)

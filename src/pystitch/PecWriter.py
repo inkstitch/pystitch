@@ -49,7 +49,7 @@ def write_pec(pattern: EmbPattern, f: BinaryIO, threadlist=None):
 
 
 def write_pec_header(pattern: EmbPattern, f: BinaryIO, threadlist):
-    name = pattern.get_metadata("name", "Untitled")
+    name = pattern.get_metadata("name") or "Untitled"
     # the usage of other characters can mess up the output file
     name = re.sub('[^A-Za-z0-9]+', '', name) or "Untitled"
     write_string_utf8(f, "LA:%-16s\r" % name[:8])
@@ -163,7 +163,7 @@ def pec_encode(pattern: EmbPattern, f: BinaryIO):
         yy += dy
         if data == STITCH:
             if jumping:
-                if dx != 0 and dy != 0:
+                if dx != 0 or dy != 0:
                     write_stitch(f, 0, 0)
                 jumping = False
             write_stitch(f, dx, dy)
@@ -186,7 +186,9 @@ def pec_encode(pattern: EmbPattern, f: BinaryIO):
         elif data == STOP:
             pass  # These will already be processed into duplicate colors.
         elif data == TRIM:
-            pass
+            # Signal the machine to trim; the next JUMP will provide
+            # the repositioning movement with TRIM_CODE flag.
+            jumping = True
         elif data == END:
             f.write(b"\xff")
             break

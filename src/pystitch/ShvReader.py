@@ -42,7 +42,7 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
     current_color_index = 0
     try:
         max_stitches = stitch_per_color[current_color_index]
-    except IndexError:
+    except (KeyError, IndexError):
         max_stitches = 0
     while True:
         flags = STITCH
@@ -79,3 +79,4 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
         stitches_since_stop += 1
         out.add_stitch_relative(flags, dx, dy)
     out.end()
+    out.interpolate_trims(3)

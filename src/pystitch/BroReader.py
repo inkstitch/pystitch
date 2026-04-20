@@ -46,3 +46,4 @@ def read_bro_stitches(f: BinaryIO, out: EmbPattern):
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x100, 0)
     read_bro_stitches(f, out)
+    out.interpolate_trims(1)

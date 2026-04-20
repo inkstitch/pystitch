@@ -14,8 +14,8 @@ PC_SIZE_CONVERSION_RATIO = 5.0 / 3.0
 
 
 def read_pc_file(f: BinaryIO, out: EmbPattern, settings=None):
-    version = read_int_8(f)
-    hoop_size = read_int_8(f)
+    _version = read_int_8(f)
+    _hoop_size = read_int_8(f)
     # 0 for PCD,
     # 1 for PCQ (MAXI),
     # 2 for PCS small hoop(80x80),
@@ -27,11 +27,11 @@ def read_pc_file(f: BinaryIO, out: EmbPattern, settings=None):
         out.add_thread(thread)
         f.seek(1, 1)
 
-    stitch_count = read_int_16le(f)
+    _stitch_count = read_int_16le(f)
     while True:
-        c0 = read_int_8(f)
+        _c0 = read_int_8(f)
         x = read_int_24le(f)
-        c1 = read_int_8(f)
+        _c1 = read_int_8(f)
         y = read_int_24le(f)
         ctrl = read_int_8(f)
         if ctrl is None:
@@ -55,3 +55,4 @@ def read_pc_file(f: BinaryIO, out: EmbPattern, settings=None):
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     read_pc_file(f, out)
+    out.interpolate_trims(3)

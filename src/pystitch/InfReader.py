@@ -6,9 +6,9 @@ from .ReadHelper import read_int_16be, read_int_32be
 
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):
-    u0 = read_int_32be(f)
-    u1 = read_int_32be(f)
-    u2 = read_int_32be(f)
+    _u0 = read_int_32be(f)
+    _u1 = read_int_32be(f)
+    _u2 = read_int_32be(f)
     number_of_colors = read_int_32be(f)
     for j in range(0, number_of_colors):
         length = read_int_16be(f) - 2  # 2 bytes of the length.

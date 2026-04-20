@@ -32,3 +32,4 @@ def read_100_stitches(f: BinaryIO, out: EmbPattern):
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     read_100_stitches(f, out)
+    out.interpolate_trims(3)

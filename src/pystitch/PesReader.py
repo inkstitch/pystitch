@@ -73,7 +73,7 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
 
 def read_pes_string(f: BinaryIO):
     length = read_int_8(f)
-    if length == 0:
+    if length is None or length == 0:
         return None
     return read_string_8(f, length)
 

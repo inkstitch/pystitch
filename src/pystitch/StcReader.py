@@ -32,3 +32,4 @@ def stc_stitch_encoding_read(f: BinaryIO, out: EmbPattern):
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x28, 1)  # DESIGN: xxxxxx STITCHES: xxxx.
     stc_stitch_encoding_read(f, out)
+    out.interpolate_trims(3)

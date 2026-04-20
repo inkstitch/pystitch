@@ -126,20 +126,20 @@ def write_design_block(f: BinaryIO, extends, colorblocks):
     center_x = extends[2] - half_width
     center_y = extends[3] - half_height
 
-    write_int_32be(f, int(center_x) * 100)  # initial x
-    write_int_32be(f, int(center_y) * -100)  # initial y
+    write_int_32be(f, int(center_x * 100))  # initial x
+    write_int_32be(f, int(center_y * -100))  # initial y
     write_int_8(f, 0)
     write_int_8(f, 0)
     write_int_8(f, 0)
 
     # extends 2
-    write_int_32be(f, int(half_width) * -100)
-    write_int_32be(f, int(half_width) * 100)
-    write_int_32be(f, int(half_height) * -100)
-    write_int_32be(f, int(half_height) * 100)
+    write_int_32be(f, int(half_width * -100))
+    write_int_32be(f, int(half_width * 100))
+    write_int_32be(f, int(half_height * -100))
+    write_int_32be(f, int(half_height * 100))
 
-    write_int_32be(f, int(width) * 100)
-    write_int_32be(f, int(height) * 100)
+    write_int_32be(f, int(width * 100))
+    write_int_32be(f, int(height * 100))
     vp3_write_string_16(f, "")  # This is notes and settings string.
 
     f.write(b"\x64\x64")  # write_int_16be(f, 25700)
@@ -184,16 +184,16 @@ def write_vp3_colorblock(f: BinaryIO, first, center_x, center_y, stitches, threa
         last_pos_y = 0
     start_position_from_center_x = first_pos_x - center_x
     start_position_from_center_y = -(first_pos_y - center_y)
-    write_int_32be(f, int(start_position_from_center_x) * 100)
-    write_int_32be(f, int(start_position_from_center_y) * 100)
+    write_int_32be(f, int(start_position_from_center_x * 100))
+    write_int_32be(f, int(start_position_from_center_y * 100))
 
     vp3_write_thread(f, thread)
 
     block_shift_x = last_pos_x - first_pos_x
     block_shift_y = -(last_pos_y - first_pos_y)
 
-    write_int_32be(f, int(block_shift_x) * 100)
-    write_int_32be(f, int(block_shift_y) * 100)
+    write_int_32be(f, int(block_shift_x * 100))
+    write_int_32be(f, int(block_shift_y * 100))
 
     write_stitches_block(f, stitches, first_pos_x, first_pos_y)
 
@@ -228,6 +228,7 @@ def write_stitches_block(f: BinaryIO, stitches, first_pos_x, first_pos_y):
     f.write(b"\x0A\xF6\x00")
     last_x = first_pos_x
     last_y = first_pos_y
+    trimmed = False
 
     for stitch in stitches:
         x = stitch[0]
@@ -244,6 +245,7 @@ def write_stitches_block(f: BinaryIO, stitches, first_pos_x, first_pos_y):
             continue
         elif flags == TRIM:
             f.write(b"\x80\x03")
+            trimmed = True
             continue
         elif flags == SEQUIN_MODE:
             continue
@@ -252,13 +254,18 @@ def write_stitches_block(f: BinaryIO, stitches, first_pos_x, first_pos_y):
         elif flags == STOP:
             continue
         elif flags == JUMP:
-            # VP3 has no jump commands. These are skipped.
-            # It moves to the relevant location without needing to block the needlebar.
+            # VP3 has no jump commands. Emit a trim marker if not already
+            # trimmed so the machine lifts the needle. The next stitch's
+            # delta from the pre-jump position provides the repositioning.
+            if not trimmed:
+                f.write(b"\x80\x03")
+                trimmed = True
             continue
         dx = int(round(x - last_x))
         dy = int(round(y - last_y))
         last_x += dx
         last_y += dy
+        trimmed = False
         if flags == STITCH:
             if -127 <= dx <= 127 and -127 <= dy <= 127 and alt == 0:
                 write_int_8(f, dx)

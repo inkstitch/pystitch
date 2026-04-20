@@ -6,39 +6,56 @@ from .ReadHelper import read_int_32le, signed8
 
 
 def read_jef_stitches(f: BinaryIO, out: EmbPattern, settings=None):
+    # Bulk-read all remaining stitch data
+    raw = f.read()
+    data_len = len(raw)
+    if data_len < 2:
+        out.end(0, 0)
+        return
+
+    # Local references for speed
+    stitch = out.stitch
+    move = out.move
+    trim_fn = out.trim
+    color_change = out.color_change
+    stop = out.stop
+    threadlist = out.threadlist
+
     color_index = 1
-    while True:
-        b = bytearray(f.read(2))
-        if len(b) != 2:
-            break
-        if b[0] != 0x80:
-            x = signed8(b[0])
-            y = -signed8(b[1])
-            out.stitch(x, y)
+    offset = 0
+
+    while offset <= data_len - 2:
+        b0 = raw[offset]
+        b1 = raw[offset + 1]
+        offset += 2
+
+        if b0 != 0x80:
+            x = signed8(b0)
+            y = -signed8(b1)
+            stitch(x, y)
             continue
-        ctrl = b[1]
-        b = bytearray(f.read(2))
-        if len(b) != 2:
+
+        ctrl = b1
+        if offset > data_len - 2:
             break
-        x = signed8(b[0])
-        y = -signed8(b[1])
+        b0 = raw[offset]
+        b1 = raw[offset + 1]
+        offset += 2
+
+        x = signed8(b0)
+        y = -signed8(b1)
         if ctrl == 0x02:
             if x == 0 and y == 0:
-                # My Janome MC400E only trims if there are three jumps in a
-                # row.  However, JEF files found in the wild seem to be written
-                # with the expectation that a single zero-length jump is a
-                # trim, so we read it as such.
-                out.trim(x, y)
+                trim_fn(x, y)
             else:
-                out.move(x, y)
+                move(x, y)
             continue
         if ctrl == 0x01:
-            # PATCH: None means stop since it was color #0
-            if out.threadlist[color_index] is None:
-                out.stop(0, 0)
-                del out.threadlist[color_index]
+            if color_index < len(threadlist) and threadlist[color_index] is None:
+                stop(0, 0)
+                del threadlist[color_index]
             else:
-                out.color_change(0, 0)
+                color_change(0, 0)
                 color_index += 1
             continue
         if ctrl == 0x10:

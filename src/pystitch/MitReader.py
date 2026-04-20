@@ -42,3 +42,4 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
             out.stitch(x, y)
         previous_ctrl = ctrl
     out.end()
+    out.interpolate_trims(3)

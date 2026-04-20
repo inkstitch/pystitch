@@ -34,27 +34,27 @@ class Turtle:
         self.y += distance * math.sin(self.angle)
 
     def add_gosper(self):
-        a = lambda: self.forward(20)
-        b = lambda: self.forward(20)
-        l = lambda: self.turn(self.turn_amount)
-        r = lambda: self.turn(-self.turn_amount)
-        initial = lambda: None
+        def a(): self.forward(20)
+        def b(): self.forward(20)
+        def ln(): self.turn(self.turn_amount)
+        def r(): self.turn(-self.turn_amount)
+        def initial(): pass
         rules = {
             initial: [a],
-            a: [a, l, b, l, l, b, r, a, r, r, a, a, r, b, l],
-            b: [r, a, l, b, b, l, l, b, l, a, r, r, a, r, b]
+            a: [a, ln, b, ln, ln, b, r, a, r, r, a, a, r, b, ln],
+            b: [r, a, ln, b, b, ln, ln, b, ln, a, r, r, a, r, b]
         }
         evaluate_lsystem(initial, rules, 3)  # 4
 
     def add_serp(self):
-        a = lambda: self.forward(20)
-        b = lambda: self.forward(20)
-        l = lambda: self.turn(self.turn_amount)
-        r = lambda: self.turn(-self.turn_amount)
-        initial = lambda: None
+        def a(): self.forward(20)
+        def b(): self.forward(20)
+        def ln(): self.turn(self.turn_amount)
+        def r(): self.turn(-self.turn_amount)
+        def initial(): pass
         rules = {
             initial: [a],
-            a: [b, l, a, l, b],
+            a: [b, ln, a, ln, b],
             b: [a, r, b, r, a]
         }
         evaluate_lsystem(initial, rules, 3)  # 6

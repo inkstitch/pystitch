@@ -36,5 +36,8 @@ def read_zxy_stitches(f: BinaryIO, out: EmbPattern):
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(0x01, 0)
     stitch_start_distance = read_int_16be(f)
+    if stitch_start_distance is None:
+        out.end()
+        return
     f.seek(stitch_start_distance, 1)
     read_zxy_stitches(f, out)

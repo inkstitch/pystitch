@@ -37,3 +37,4 @@ def new_stitch_encoding_read(f: BinaryIO, out: EmbPattern):
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     f.seek(2, 1)  # stitchcount.
     new_stitch_encoding_read(f, out)
+    out.interpolate_trims(3)

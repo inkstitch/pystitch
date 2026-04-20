@@ -1,3 +1,6 @@
+from typing import Any, Optional
+
+
 def build_unique_palette(thread_palette, threadlist):
     """Turns a threadlist into a unique index list with the thread palette"""
     chart = [None] * len(thread_palette)  # Create a lookup chart.
@@ -43,7 +46,7 @@ def build_nonrepeat_palette(thread_palette, threadlist):
     return palette
 
 
-def find_nearest_color_index(find_color, values):
+def find_nearest_color_index(find_color: Any, values: Any) -> Any:
     if isinstance(find_color, EmbThread):
         find_color = find_color.color
     red = (find_color >> 16) & 0xFF
@@ -67,13 +70,14 @@ def color_rgb(r, g, b):
     return int(((r & 255) << 16) | ((g & 255) << 8) | (b & 255))
 
 
-def color_hex(hex_string):
+def color_hex(hex_string: str) -> int:
     h = hex_string.lstrip("#")
     size = len(h)
     if size == 6 or size == 8:
         return int(h[:6], 16)
     elif size == 4 or size == 3:
         return int(h[0] + h[0] + h[1] + h[1] + h[2] + h[2], 16)
+    return 0
 
 
 def color_distance_red_mean(r1, g1, b1, r2, g2, b2):
@@ -101,13 +105,13 @@ class EmbThread:
         chart=None,
         weight=None,
     ):
-        self.color = 0x000000
-        self.description = description  # type: str
-        self.catalog_number = catalog_number  # type: str
-        self.details = details  # type: str
-        self.brand = brand  # type: str
-        self.chart = chart  # type: str
-        self.weight = weight  # type: str
+        self.color: int = 0x000000
+        self.description: Optional[str] = description
+        self.catalog_number: Optional[str] = catalog_number
+        self.details: Optional[str] = details
+        self.brand: Optional[str] = brand
+        self.chart: Optional[str] = chart
+        self.weight: Optional[str] = weight
         # description, catalog_number, details, brand, chart, weight
         if thread is not None:
             self.set(thread)

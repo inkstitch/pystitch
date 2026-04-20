@@ -16,7 +16,7 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     stitches = pattern.stitches
     stitch_count = len(stitches)
     for i in range(0, 0x80):
-        f.write(b"0")
+        f.write(b"\x00")
     if stitch_count == 0:
         return
     extends = pattern.bounds()

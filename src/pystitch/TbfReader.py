@@ -43,10 +43,7 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
                 out.needle_change(needle=needle_value)
             continue
         elif ctrl == 0x90:
-            if x == 0 and y == 0:
-                out.trim()
-            else:
-                out.move(signed8(x), -signed8(y))
+            out.move(signed8(x), -signed8(y))
             continue
         elif ctrl == 0x40:
             out.stop()

@@ -11,7 +11,7 @@ def read(f: BinaryIO, out: EmbPattern, settings=None):
     stitch_count = read_int_32le(f)
     for i in range(0, stitch_count):
         x = read_int_24le(f)
-        c0 = read_int_8(f)
+        _c0 = read_int_8(f)
         y = read_int_24le(f)
         c1 = read_int_8(f)
         x = signed24(x)

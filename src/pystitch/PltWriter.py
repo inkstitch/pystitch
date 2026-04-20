@@ -8,7 +8,6 @@ work and are the typical goal product.
 The standard step size of 1 unit in HPGL is 1/40 mm. As opposed to 1/10 mm which is standard for embroidery. HPGL is
 increasing Y is downwards, which is contrary to most embroidery.
 """
-import sys
 from typing import BinaryIO
 
 from .EmbPattern import EmbPattern
@@ -25,18 +24,17 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None):
     trimmed = True
 
     stitches = pattern.stitches
+    origin_x = stitches[0][0] if stitches else 0
+    origin_y = stitches[0][1] if stitches else 0
     xx = 0
     yy = 0
-
-    # Start point = (0, 0)
-    pattern.translate(-pattern.stitches[0][0], -pattern.stitches[0][1])
 
     pen_id = 1
 
     for stitch in stitches:
         # 4 to convert 1/10mm to 1/40mm.
-        x = stitch[0] * 4.0
-        y = stitch[1] * 4.0
+        x = (stitch[0] - origin_x) * 4.0
+        y = (stitch[1] - origin_y) * 4.0
         data = stitch[2] & COMMAND_MASK
         dx = int(round(x - xx))
         dy = int(round(y - yy))

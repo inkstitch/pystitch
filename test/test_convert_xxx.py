@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import os
 import unittest
 
 from test.pattern_for_tests import *

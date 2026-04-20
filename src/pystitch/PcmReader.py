@@ -36,12 +36,12 @@ def read_pc_file(f: BinaryIO, out: EmbPattern, settings=None):
         thread = pcm_threads[color_index]
         out.add_thread(thread)
 
-    stitch_count = read_int_16be(f)
+    _stitch_count = read_int_16be(f)
     while True:
         x = read_int_24be(f)
-        c0 = read_int_8(f)
+        _c0 = read_int_8(f)
         y = read_int_24be(f)
-        c1 = read_int_8(f)
+        _c1 = read_int_8(f)
         ctrl = read_int_8(f)
         if ctrl is None:
             break
@@ -64,3 +64,4 @@ def read_pc_file(f: BinaryIO, out: EmbPattern, settings=None):
 
 def read(f: BinaryIO, out: EmbPattern, settings=None):
     read_pc_file(f, out)
+    out.interpolate_trims(3)
