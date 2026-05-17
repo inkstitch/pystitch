@@ -34,6 +34,8 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None) -> None:
 
     # Write index of each color
     for thread in pattern.threadlist:
+        if not thread.catalog_number:
+            continue
         index = int(thread.catalog_number)
         write_int_16le(f, index)
 
@@ -41,7 +43,7 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None) -> None:
     f.seek(STITCH_COUNT_OFFSET, 0)
     for block in pattern.get_as_colorblocks():
         stitches, color = block
-        # This does not seem to produce expected values
+        # This may produce lower than actual values
         count = len([stitch for stitch in stitches if stitch[2] != COLOR_CHANGE])
         write_int_16le(f, count)
 
@@ -70,4 +72,4 @@ def write(pattern: EmbPattern, f: BinaryIO, settings=None) -> None:
             write_int_array_8(f, [dx, -dy])
 
     # End pattern
-    write_int_array_8(f, [0x80, 0x00])
+    write_int_array_8(f, [0x80, 0x10])
