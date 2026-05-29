@@ -1,6 +1,9 @@
+from pathlib import Path
+import tempfile
 import unittest
 
-from test.pattern_for_tests import *
+from test.pattern_for_tests import get_simple_pattern
+
 import pystitch
 
 
@@ -10,8 +13,10 @@ class TestExplicitIOErrors(unittest.TestCase):
         1.5.0 adds explicit error raising.
         We test that now.
         """
-        file1 = "nosuchfile.dst"
-        self.assertRaises(IOError, lambda: pystitch.read(file1))
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            file1 = Path(tmpdirname) / "nosuchfile.dst"
+            with self.assertRaises(IOError):
+                pystitch.read(str(file1))
 
     def test_write_non_supported(self):
         """
@@ -19,8 +24,10 @@ class TestExplicitIOErrors(unittest.TestCase):
         We test that now.
         """
         pattern = get_simple_pattern()
-        file1 = "nosuchfile.pdf"
-        self.assertRaises(IOError, lambda: pystitch.write(pattern, file1))
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            file1 = Path(tmpdirname) / "nosuchfile.pdf"
+            with self.assertRaises(IOError):
+                pystitch.write(pattern, str(file1))
 
     def test_write_no_writer(self):
         """
@@ -28,5 +35,7 @@ class TestExplicitIOErrors(unittest.TestCase):
         We test that now.
         """
         pattern = get_simple_pattern()
-        file1 = "nosuchfile.dat"
-        self.assertRaises(IOError, lambda: pystitch.write(pattern, file1))
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            file1 = Path(tmpdirname) / "nosuchfile.dat"
+            with self.assertRaises(IOError):
+                pystitch.write(pattern, str(file1))

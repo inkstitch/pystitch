@@ -1,9 +1,9 @@
-from __future__ import print_function
-
 import unittest
 
-from test.pattern_for_tests import *
+from test.pattern_for_tests import get_shift_pattern
 
+from pystitch import *
+from pystitch import EmbPattern, EmbThread, EmbMatrix
 
 class TestOverloads(unittest.TestCase):
 
@@ -88,5 +88,3 @@ class TestOverloads(unittest.TestCase):
         m2.post_scale(2)
         m2.post_rotate(30)
         self.assertEqual(catted, m2)
-
-
