@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -19,17 +19,17 @@ license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["embroidery", "file conversion"]
 classifiers = [
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Developers",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-	"Programming Language :: Python :: 3.11",
-	"Programming Language :: Python :: 3.12",
-	"Programming Language :: Python :: 3.13",
-        "Operating System :: OS Independent",
-        "Topic :: Software Development :: Libraries :: Python Modules"
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
 [project.urls]
-Repository = "https://github.com/inkstitch/pystitch"
+Repository = "https://github.com/inkstitch/pystitch.git"
 Issues = "https://github.com/inkstitch/pystitch/issues"
