@@ -1,4 +1,4 @@
-import os
+from pathlib import PurePath
 
 from .EmbEncoder import Transcoder as Normalizer
 from .EmbFunctions import *
@@ -541,7 +541,7 @@ class EmbPattern:
             if dy is None:
                 dy = 0
             self.add_command(MATRIX_TRANSLATE, dx, dy)
-        if sx is not None or sx is not None:
+        if sx is not None or sy is not None:
             if sx is None:
                 sx = sy
             if sy is None:
@@ -798,7 +798,7 @@ class EmbPattern:
     @staticmethod
     def get_extension_by_filename(filename):
         """extracts the extension from a filename"""
-        return os.path.splitext(filename)[1][1:]
+        return PurePath(filename).suffix[1:]
 
     @staticmethod
     def read_embroidery(reader, f, settings=None, pattern=None):
@@ -809,11 +809,7 @@ class EmbPattern:
             pattern = EmbPattern()
 
         if isinstance(f, str):
-            text_mode = False
-            try:
-                text_mode = reader.READ_FILE_IN_TEXT_MODE
-            except AttributeError:
-                pass
+            text_mode = getattr(reader, "READ_FILE_IN_TEXT_MODE", False)
             if text_mode:
                 try:
                     with open(f, "r", errors='ignore') as stream:
@@ -833,84 +829,76 @@ class EmbPattern:
     def write_embroidery(writer, pattern, stream, settings=None):
         if pattern is None:
             return
+
+        if isinstance(stream, str):
+            text_mode = getattr(writer, "WRITE_FILE_IN_TEXT_MODE", False)
+            file_mode = "w" if text_mode else "wb"
+            with open(stream, file_mode) as stream:
+                return EmbPattern.write_embroidery(writer, pattern, stream, settings)
+
         if settings is None:
             settings = {}
         else:
             settings = settings.copy()
-        try:
-            encode = writer.ENCODE
-        except AttributeError:
-            encode = True
+
+        encode = getattr(writer, "ENCODE", True)
 
         if settings.get("encode", encode):
-            if not ("max_jump" in settings):
+            if "max_jump" not in settings:
                 try:
                     settings["max_jump"] = writer.MAX_JUMP_DISTANCE
                 except AttributeError:
                     pass
-            if not ("max_stitch" in settings):
+            if "max_stitch" not in settings:
                 try:
                     settings["max_stitch"] = writer.MAX_STITCH_DISTANCE
                 except AttributeError:
                     pass
-            if not ("full_jump" in settings):
+            if "full_jump" not in settings:
                 try:
                     settings["full_jump"] = writer.FULL_JUMP
                 except AttributeError:
                     pass
-            if not ("round" in settings):
+            if "round" not in settings:
                 try:
                     settings["round"] = writer.ROUND
                 except AttributeError:
                     pass
-            if not ("writes_speeds" in settings):
+            if "writes_speeds" not in settings:
                 try:
                     settings["writes_speeds"] = writer.WRITES_SPEEDS
                 except AttributeError:
                     pass
-            if not ("sequin_contingency" in settings):
+            if "sequin_contingency" not in settings:
                 try:
                     settings["sequin_contingency"] = writer.SEQUIN_CONTINGENCY
                 except AttributeError:
                     pass
-            if not ("thread_change_command" in settings):
+            if "thread_change_command" not in settings:
                 try:
                     settings["thread_change_command"] = writer.THREAD_CHANGE_COMMAND
                 except AttributeError:
                     pass
-            if not ("explicit_trim" in settings):
+            if "explicit_trim" not in settings:
                 try:
                     settings["explicit_trim"] = writer.EXPLICIT_TRIM
                 except AttributeError:
                     pass
-            if not ("translate" in settings):
+            if "translate" not in settings:
                 try:
                     settings["translate"] = writer.TRANSLATE
                 except AttributeError:
                     pass
-            if not ("scale" in settings):
+            if "scale" not in settings:
                 try:
                     settings["scale"] = writer.SCALE
                 except AttributeError:
                     pass
-            if not ("rotate" in settings):
+            if "rotate" not in settings:
                 try:
                     settings["rotate"] = writer.ROTATE
                 except AttributeError:
                     pass
             pattern = pattern.get_normalized_pattern(settings)
 
-        if isinstance(stream, str):
-            text_mode = False
-            try:
-                text_mode = writer.WRITE_FILE_IN_TEXT_MODE
-            except AttributeError:
-                pass
-            if text_mode:
-                with open(stream, "w") as stream:
-                    writer.write(pattern, stream, settings)
-            else:
-                with open(stream, "wb") as stream:
-                    writer.write(pattern, stream, settings)
-        else:
-            writer.write(pattern, stream, settings)
+        writer.write(pattern, stream, settings)

@@ -249,7 +249,7 @@ class EmbThread:
         if color == "random":
             import random
 
-            return random.randint(0, 0xFFFFFF)
+            return random.getrandbits(24)
         if color[0:1] == "#":
             return color_hex(color[1:])
         color_dict = {
