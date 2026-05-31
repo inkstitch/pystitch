@@ -92,36 +92,46 @@ def read(filename, settings=None, pattern=None):
     """Reads file, assuming type by extension"""
     extension = EmbPattern.get_extension_by_filename(filename)
     extension = extension.lower()
-    for file_type in supported_formats():
-        if file_type["extension"] != extension:
-            continue
-        reader = file_type.get("reader", None)
-        return EmbPattern.read_embroidery(reader, filename, settings, pattern)
-    return None
+
+    file_type = {}
+    for format in supported_formats():
+        if extension == format["extension"]:
+            file_type = format
+            break
+
+    reader = file_type.get("reader")
+
+    if reader is None:
+        return None
+
+    return EmbPattern.read_embroidery(reader, filename, settings, pattern)
 
 
 def write(pattern, filename, settings=None):
     """Writes file, assuming type by extension"""
     extension = EmbPattern.get_extension_by_filename(filename)
     extension = extension.lower()
-    supported_extensions = [file_type["extension"] for file_type in supported_formats()]
 
-    if extension not in supported_extensions:
+    file_type = None
+    for format in supported_formats():
+        if extension == format["extension"]:
+            file_type = format
+            break
+
+    if file_type is None:
         raise IOError("Conversion to file type '{extension}' is not supported".format(extension=extension))
 
-    ext_to_file_type_lookup = {file_type["extension"]: file_type for file_type in supported_formats()}
-    writer = ext_to_file_type_lookup[extension].get("writer")
+    writer = file_type.get("writer")
 
-    if writer:
-        EmbPattern.write_embroidery(writer, pattern, filename, settings)
-    else:
+    if writer is None:
         raise IOError("No supported writer found.")
+
+    EmbPattern.write_embroidery(writer, pattern, filename, settings)
 
 def convert(filename_from, filename_to, settings=None):
     pattern = read(filename_from, settings)
-    if pattern is None:
-        return
-    write(pattern, filename_to, settings)
+    if pattern is not None:
+        write(pattern, filename_to, settings)
 
 def supported_formats():
     """Generates dictionary entries for supported formats. Each entry will

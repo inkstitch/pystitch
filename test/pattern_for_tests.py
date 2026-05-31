@@ -268,7 +268,7 @@ def get_random_pattern_large(count=1000):
             [(random.uniform(-500, 500), random.uniform(-500, 500)),
              (random.uniform(-500, 500), random.uniform(-500, 500)),
              (random.uniform(-500, 500), random.uniform(-500, 500))],
-            random.randint(0x000000, 0xFFFFFF))
+            random.getrandbits(24))
     return pattern
 
 
@@ -280,7 +280,7 @@ def get_random_pattern_small():
         [(random.uniform(-500, 500), random.uniform(-500, 500)),
          (random.uniform(-500, 500), random.uniform(-500, 500)),
          (random.uniform(-500, 500), random.uniform(-500, 500))],
-        random.randint(0x000000, 0xFFFFFF))
+        random.getrandbits(24))
     return pattern
 
 
@@ -291,7 +291,7 @@ def get_random_pattern_small_halfs():
         [(random.randint(-500, 500) / 2.0, random.randint(-500, 500) / 2.0),
          (random.randint(-500, 500) / 2.0, random.randint(-500, 500) / 2.0),
          (random.randint(-500, 500) / 2.0, random.randint(-500, 500) / 2.0)],
-        random.randint(0x000000, 0xFFFFFF))
+        random.getrandbits(24))
     return pattern
 
 
