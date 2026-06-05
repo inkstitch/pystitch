@@ -115,6 +115,7 @@ Pystitch will write:
 * .jef (Janome Embroidery Format)
 * .pec (Brother Embroidery Format)
 * .pes (Brother Embroidery Format)
+* .sew (Janome Embroidery Format)
 * .tbf (Tajima Embroidery Format)
 * .u01 (Barudan Embroidery Format)
 * .vp3 (Pfaff Embroidery Format)
