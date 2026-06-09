@@ -69,6 +69,7 @@ import pystitch.PngWriter as PngWriter
 import pystitch.QccReader as QccReader
 import pystitch.QccWriter as QccWriter
 import pystitch.SewReader as SewReader
+import pystitch.SewWriter as SewWriter
 import pystitch.ShvReader as ShvReader
 import pystitch.SpxReader as SpxReader
 import pystitch.StcReader as StcReader
@@ -280,6 +281,7 @@ def supported_formats():
             "mimetype": "application/x-sew",
             "category": "embroidery",
             "reader": SewReader,
+            "writer": SewWriter,
         }
     )
     yield (
