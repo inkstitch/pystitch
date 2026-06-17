@@ -1,9 +1,7 @@
-from __future__ import print_function
-
 import unittest
 
-from pystitch import *
-from pystitch.EmbThreadPec import *
+from pystitch import EmbPattern, EmbThread
+from pystitch.EmbThreadPec import get_thread_set
 from pystitch.EmbThread import build_unique_palette, build_nonrepeat_palette, build_palette
 
 
@@ -18,13 +16,13 @@ class TestPalettes(unittest.TestCase):
         pattern += "Red"
         threadset = get_thread_set()
         palette = build_unique_palette(threadset,pattern.threadlist)
-        self.assertNotEqual(palette[0],palette[3])  # Red and altered Red
-        self.assertEqual(palette[1], palette[2])  # Blue and Blue
+        self.assertNotEqual(palette[0], palette[3], "Red and altered Red")
+        self.assertEqual(palette[1], palette[2], "Blue and Blue")
 
     def test_unique_palette_large(self):
         """Excessive palette entries that all map, should be mapped"""
         pattern = EmbPattern()
-        for x in range(0, 100):
+        for _ in range(0, 100):
             pattern += "black"
         threadset = get_thread_set()
         palette = build_unique_palette(threadset, pattern.threadlist)
@@ -51,7 +49,7 @@ class TestPalettes(unittest.TestCase):
             pattern += thread
         palette = build_unique_palette(threadset, pattern.threadlist)
         palette.sort()
-        for i in range(1,len(palette)):
+        for i in range(1, len(palette)):
             self.assertNotEqual(palette[i-1], palette[i])
 
     def test_nonrepeat_palette_moving(self):
@@ -63,8 +61,8 @@ class TestPalettes(unittest.TestCase):
         pattern += "Red"
         threadset = get_thread_set()
         palette = build_nonrepeat_palette(threadset,pattern.threadlist)
-        self.assertEqual(palette[0],palette[3]) # Red and Red
-        self.assertNotEqual(palette[1], palette[2])  # Blue and altered Blue
+        self.assertEqual(palette[0], palette[3], "Red and Red")
+        self.assertNotEqual(palette[1], palette[2], "Blue and altered Blue")
 
     def test_nonrepeat_palette_stay_moved(self):
         """An almost same moved, only temporary"""
@@ -76,9 +74,9 @@ class TestPalettes(unittest.TestCase):
         pattern += "#0100FF"
         threadset = get_thread_set()
         palette = build_nonrepeat_palette(threadset,pattern.threadlist)
-        self.assertEqual(palette[0],palette[3]) # Red and Red
-        self.assertNotEqual(palette[1], palette[2])  # Blue and altered Blue
-        self.assertNotEqual(palette[2], palette[4])  # same color, but color was moved
+        self.assertEqual(palette[0], palette[3], "Red and Red")
+        self.assertNotEqual(palette[1], palette[2], "Blue and altered Blue")
+        self.assertNotEqual(palette[2], palette[4], "same color, but color was moved")
 
     def test_nonrepeat_palette_same(self):
         """The same exact same color if repeated should remain"""
@@ -89,8 +87,8 @@ class TestPalettes(unittest.TestCase):
         pattern += "Red"
         threadset = get_thread_set()
         palette = build_nonrepeat_palette(threadset,pattern.threadlist)
-        self.assertEqual(palette[0],palette[3]) # Red and Red
-        self.assertEqual(palette[1], palette[2])  # Blue and Blue
+        self.assertEqual(palette[0], palette[3], "Red and Red")
+        self.assertEqual(palette[1], palette[2], "Blue and Blue")
 
     def test_palette(self):
         """Similar colors map to the same index"""
@@ -101,5 +99,5 @@ class TestPalettes(unittest.TestCase):
         pattern += "Red"
         threadset = get_thread_set()
         palette = build_palette(threadset,pattern.threadlist)
-        self.assertEqual(palette[0],palette[3])  # Red and altered Red
-        self.assertEqual(palette[1], palette[2])  # Blue and Blue
+        self.assertEqual(palette[0], palette[3], "Red and altered Red")
+        self.assertEqual(palette[1], palette[2], "Blue and Blue")

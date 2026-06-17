@@ -1,7 +1,8 @@
-from __future__ import print_function
-
 import unittest
+import tempfile
+
 from pystitch import *
+from pystitch import EmbMatrix, EmbPattern
 
 
 class TestMatrix(unittest.TestCase):
@@ -57,9 +58,8 @@ class TestMatrix(unittest.TestCase):
         self.assertAlmostEqual(pattern.stitches[10][1], pattern.stitches[12][1])
         self.assertAlmostEqual(pattern.stitches[4][0], pattern.stitches[12][0])
         self.assertAlmostEqual(pattern.stitches[4][1], pattern.stitches[12][1])
-        file1 = "file.svg"
-        write_svg(pattern, file1)
-        self.addCleanup(os.remove, file1)
+        with tempfile.NamedTemporaryFile(suffix=".svg") as fp:
+            write_svg(pattern, fp)
 
     def test_matrix_translate(self):
         pattern = EmbPattern()
@@ -75,9 +75,8 @@ class TestMatrix(unittest.TestCase):
 
         self.assertAlmostEqual(pattern.stitches[4][0], pattern.stitches[12][0])
         self.assertAlmostEqual(pattern.stitches[4][1], pattern.stitches[12][1])
-        file1 = "file2.svg"
-        write_svg(pattern, file1)
-        self.addCleanup(os.remove, file1)
+        with tempfile.NamedTemporaryFile(suffix=".svg") as fp:
+            write_svg(pattern, fp)
 
     def test_matrix_translate_rotate(self):
         pattern = EmbPattern()
@@ -93,9 +92,8 @@ class TestMatrix(unittest.TestCase):
         self.assertEqual(pattern.count_stitch_commands(MATRIX_ROTATE), 0)
         self.assertAlmostEqual(pattern.stitches[14][0], 140)
         self.assertAlmostEqual(pattern.stitches[14][1], -120)
-        file1 = "file3.svg"
-        write_svg(pattern, file1)
-        self.addCleanup(os.remove, file1)
+        with tempfile.NamedTemporaryFile(suffix=".svg") as fp:
+            write_svg(pattern, fp)
 
     def test_matrix_translate_scale(self):
         pattern = EmbPattern()
@@ -111,6 +109,5 @@ class TestMatrix(unittest.TestCase):
         self.assertEqual(pattern.count_stitch_commands(MATRIX_SCALE), 0)
         self.assertAlmostEqual(pattern.stitches[13][0], 50)
         self.assertAlmostEqual(pattern.stitches[13][1], 290)
-        file1 = "file4.svg"
-        write_svg(pattern, file1)
-        self.addCleanup(os.remove, file1)
+        with tempfile.NamedTemporaryFile(suffix=".svg") as fp:
+            write_svg(pattern, fp)

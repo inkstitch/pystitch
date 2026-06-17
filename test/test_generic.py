@@ -1,46 +1,49 @@
-from __future__ import print_function
-
+from pathlib import Path
 import unittest
+import tempfile
 
-from test.pattern_for_tests import *
-from pystitch import GenericWriter
+from test.pattern_for_tests import get_fractal_pattern
+
 import pystitch
+from pystitch import GenericWriter, EmbPattern
 
 
 class TestConverts(unittest.TestCase):
     def test_generic_write_stitch(self):
-        file1 = "convert.dst"
-        file2 = "convert.txt"
-        self.addCleanup(os.remove, file1)
-        self.addCleanup(os.remove, file2)
         pattern = get_fractal_pattern()
-        pystitch.write(pattern, file1)
 
-        pattern = pystitch.read(file1)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            tmpdir = Path(tmpdirname)
 
-        EmbPattern.write_embroidery(
-            GenericWriter,
-            pattern,
-            file2,
-            {
-                "segment_start": "\t\t",
-                "segment_end": "\n",
-                "segment": "{cmd_str} {x},{y}",
-                "stitch": "Stitch: {x},{y}",
-                "jump": "Jump {x},{y}",
-                "trim": "Trim: {x},{y}",
-                "color_change": "Color-Change: {x},{y}",
-                "block_start": "\t{{\n",
-                "block_end": "\t}}\n",
-                "color_start": "[\n",
-                "color_end": "]\n",
-            },
-        )
-        print("write generic: ", file1)
+            file1 = tmpdir / "convert.dst"
+            file2 = tmpdir / "convert.txt"
 
+            pystitch.write(pattern, file1)
+            pattern = pystitch.read(file1)
+
+            EmbPattern.write_embroidery(
+                GenericWriter,
+                pattern,
+                file2,
+                {
+                    "segment_start": "\t\t",
+                    "segment_end": "\n",
+                    "segment": "{cmd_str} {x},{y}",
+                    "stitch": "Stitch: {x},{y}",
+                    "jump": "Jump {x},{y}",
+                    "trim": "Trim: {x},{y}",
+                    "color_change": "Color-Change: {x},{y}",
+                    "block_start": "\t{{\n",
+                    "block_end": "\t}}\n",
+                    "color_start": "[\n",
+                    "color_end": "]\n",
+                },
+            )
+
+        print("write generic")
+
+    @unittest.skip("Ink/Stitch uses an other gcode writer")
     def test_generic_write_gcode(self):
-        # Ink/Stitch uses an other gcode writer
-        '''
         gcode_writer_dict = {
             "scale": (-0.1, -0.1),
             "pattern_start": "(STITCH_COUNT: {stitch_total})\n"
@@ -63,20 +66,25 @@ class TestConverts(unittest.TestCase):
             "stop": "M00\n",
             "end": "M30\n",
         }
-        file1 = "file-gcode.gcode"
-        file2 = "file-generic.gcode"
+
         pattern = get_fractal_pattern()
         pattern.fix_color_count()
-        EmbPattern.write_embroidery(
-            GenericWriter,
-            pattern,
-            file2,
-            gcode_writer_dict,
-        )
-        pattern.write(file1)
-        f1 = open(file1, "rb").read()
-        f2 = open(file2, "rb").read()
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            tmpdir = Path(tmpdirname)
+
+            file1 = tmpdir / "file-gcode.gcode"
+            file2 = tmpdir / "file-generic.gcode"
+
+            pystitch.write(pattern, file1)
+            f1 = file1.read_bytes()
+
+            EmbPattern.write_embroidery(
+                GenericWriter,
+                pattern,
+                file2,
+                gcode_writer_dict,
+            )
+            f2 = file2.read_bytes()
+
         self.assertEqual(f1, f2)
-        self.addCleanup(os.remove, file1)
-        self.addCleanup(os.remove, file2)
-        '''

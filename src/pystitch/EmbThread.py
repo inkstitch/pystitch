@@ -1,3 +1,5 @@
+from typing import Optional
+
 def build_unique_palette(thread_palette, threadlist):
     """Turns a threadlist into a unique index list with the thread palette"""
     chart = [None] * len(thread_palette)  # Create a lookup chart.
@@ -93,21 +95,21 @@ def color_distance_red_mean(r1, g1, b1, r2, g2, b2):
 class EmbThread:
     def __init__(
         self,
-        thread=None,
-        description=None,
-        catalog_number=None,
-        details=None,
-        brand=None,
-        chart=None,
-        weight=None,
+        thread = None,
+        description: Optional[str] = None,
+        catalog_number: Optional[str] = None,
+        details: Optional[str] = None,
+        brand: Optional[str] = None,
+        chart: Optional[str] = None,
+        weight: Optional[str] = None,
     ):
-        self.color = 0x000000
-        self.description = description  # type: str
-        self.catalog_number = catalog_number  # type: str
-        self.details = details  # type: str
-        self.brand = brand  # type: str
-        self.chart = chart  # type: str
-        self.weight = weight  # type: str
+        self._color = 0x000000
+        self.description = description
+        self.catalog_number = catalog_number
+        self.details = details
+        self.brand = brand
+        self.chart = chart
+        self.weight = weight
         # description, catalog_number, details, brand, chart, weight
         if thread is not None:
             self.set(thread)
@@ -138,9 +140,8 @@ class EmbThread:
         if isinstance(other, int):
             return self.color & 0xFFFFFF == other & 0xFFFFFF
         if isinstance(other, str):
-            return (
-                self.color & 0xFFFFFF
-                == EmbThread.parse_string_color(other) & 0xFFFFFF
+            return self.__eq__(
+                EmbThread.parse_string_color(other)
             )
         if not isinstance(other, EmbThread):
             return False
@@ -169,32 +170,71 @@ class EmbThread:
         else:
             return "EmbThread %s %s" % (self.description, self.hex_color())
 
-    def set_color(self, r, g, b):
-        self.color = color_rgb(r, g, b)
+    @property
+    def color(self):
+        return self._color
 
-    def get_opaque_color(self):
+    @color.setter
+    def color(self, color):
+        if isinstance(color, (tuple, list)):
+            r, g, b = tuple(color[:3])
+            color = color_rgb(r, g, b)
+
+        if not isinstance(color, int):
+            raise ValueError()
+
+        self._color = color
+
+    @property
+    def opaque_color(self):
         return 0xFF000000 | self.color
 
-    def get_red(self):
+    @property
+    def red(self):
         red = self.color >> 16
         return red & 0xFF
 
-    def get_green(self):
+    @property
+    def green(self):
         green = self.color >> 8
         return green & 0xFF
 
-    def get_blue(self):
+    @property
+    def blue(self):
         blue = self.color
         return blue & 0xFF
 
-    def find_nearest_color_index(self, values):
-        return find_nearest_color_index(int(self.color), values)
+    # @property
+    # def hex_color(self):
+    #     return f"#{self.red:02X}{self.green:02X}{self.blue:02X}"
+
+    # @hex_color.setter
+    # def hex_color(self, hex_string):
+    #     self.color = color_hex(hex_string)
+
+    def set_color(self, r, g, b):
+        self.color = (r, g, b)
+
+    def get_opaque_color(self):
+        return self.opaque_color
+
+    def get_red(self):
+        return self.red
+
+    def get_green(self):
+        return self.green
+
+    def get_blue(self):
+        return self.blue
 
     def hex_color(self):
-        return "#%02x%02x%02x" % (self.get_red(), self.get_green(), self.get_blue())
+        return "#%02x%02x%02x" % (self.red, self.green, self.blue)
 
     def set_hex_color(self, hex_string):
         self.color = color_hex(hex_string)
+
+    def find_nearest_color_index(self, values):
+        return find_nearest_color_index(self.color, values)
 
     def set(self, thread):
         if isinstance(thread, EmbThread):
@@ -207,6 +247,8 @@ class EmbThread:
             self.weight = thread.weight
         elif isinstance(thread, int):
             self.color = thread
+        elif isinstance(thread, str):
+            self.color = self.parse_string_color(thread)
         elif isinstance(thread, dict):
             if "name" in thread:
                 self.description = thread["name"]
@@ -225,31 +267,25 @@ class EmbThread:
                     color = thread["color"]
                 except KeyError:
                     color = thread["rgb"]
-                if isinstance(color, int):
-                    self.color = color
-                elif isinstance(color, tuple) or isinstance(color, list):
-                    self.color = (
-                        (color[0] & 0xFF) << 16
-                        | (color[1] & 0xFF) << 8
-                        | (color[2] & 0xFF)
-                    )
-                elif isinstance(color, str):
+
+                if isinstance(color, str):
                     self.color = self.parse_string_color(color)
+
+                elif isinstance(color, (tuple, list, int)):
+                    self.color = color
             if "hex" in thread:
                 self.set_hex_color(thread["hex"])
             if "id" in thread:
                 self.catalog_number = thread["id"]
             if "catalog" in thread:
                 self.catalog_number = thread["catalog"]
-        elif isinstance(thread, str):
-            self.color = self.parse_string_color(thread)
 
     @staticmethod
     def parse_string_color(color):
         if color == "random":
             import random
 
-            return random.randint(0, 0xFFFFFF)
+            return random.getrandbits(24)
         if color[0:1] == "#":
             return color_hex(color[1:])
         color_dict = {
@@ -401,5 +437,5 @@ class EmbThread:
             "yellow": color_rgb(255, 255, 0),
             "yellowgreen": color_rgb(154, 205, 50),
         }
-        return color_dict.get(color.lower(), 0x000000)
-        # return color or black.
+        return color_dict.get(color.lower())
+        # return color or None
