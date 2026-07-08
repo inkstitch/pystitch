@@ -1,20 +1,59 @@
-from typing import Optional
+from typing import Optional, Sequence
 
-def build_unique_palette(thread_palette, threadlist):
-    """Turns a threadlist into a unique index list with the thread palette"""
-    chart = [None] * len(thread_palette)  # Create a lookup chart.
-    for thread in set(
-        threadlist
-    ):  # for each unique color, move closest remaining thread to lookup chart.
-        index = thread.find_nearest_color_index(thread_palette)
-        if index is None:
-            break  # No more threads remain in palette
-        thread_palette[index] = None  # entries may not be reused.
-        chart[index] = thread  # assign the given index to the lookup.
+from .Assignment import minimal_assignment
 
-    palette = []
-    for thread in threadlist:  # for each thread, return the index.
-        palette.append(thread.find_nearest_color_index(chart))
+
+def build_unique_palette(
+    thread_palette: list[Optional["EmbThread"]],
+    threadlist: Sequence["EmbThread"],
+) -> list[Optional[int]]:
+    """Turns a threadlist into a unique index list with the thread palette.
+
+    Each unique thread gets a distinct palette entry, chosen so that the
+    total color distance of the whole assignment is minimal. This is a classic
+    Assignment Problem (https://en.wikipedia.org/wiki/Assignment_problem).
+    If there are more unique threads than palette entries, the extra threads
+    reuse the entry of the nearest assigned thread.
+    """
+    unique_threadlist = []  # removes duplicates
+    for thread in threadlist:
+        if thread not in unique_threadlist:
+            unique_threadlist.append(thread)
+    valid_entries = [
+        (index, entry) for index, entry in enumerate(thread_palette) if entry is not None
+    ]
+    valid_indices = [index for index, _ in valid_entries]
+
+    # create two-way lookups dicts so we cache which of our threads are assigned to which thread_palette index
+    index_to_thread: list[Optional["EmbThread"]] = [None] * len(thread_palette)
+    thread_to_index: dict["EmbThread", int] = {}
+    # if we have more unique desired threads than palette threads, then assignable is shortened
+    assignable = unique_threadlist[: len(valid_entries)]
+    if assignable:
+        # Build a cost matrix for the minimal_assignment algorithm
+        cost = [
+            [
+                color_distance_red_mean(
+                    thread.get_red(), thread.get_green(), thread.get_blue(),
+                    entry.get_red(), entry.get_green(), entry.get_blue(),
+                )
+                for index, entry in valid_entries
+            ]
+            for thread in assignable
+        ]
+        # Use minimal_assignment to map desired threads to threads available in the palette
+        for row, column in enumerate(minimal_assignment(cost)):
+            index = valid_indices[column]
+            index_to_thread[index] = assignable[row]
+            thread_to_index[assignable[row]] = index
+
+    palette: list[Optional[int]] = []
+    for thread in threadlist:  # for each thread, return its assigned index.
+        palette_index = thread_to_index.get(thread)
+        if palette_index is None:
+            # This thread never got its own slot, so reuse the nearest one
+            palette_index = thread.find_nearest_color_index(index_to_thread)
+        palette.append(palette_index)
     return palette
 
 
