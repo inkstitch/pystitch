@@ -65,17 +65,19 @@ def get_thread_set():
         EmbThreadPec(9, 91, 166, "Electric Blue", "59"),
         EmbThreadPec(240, 249, 112, "Lemon Yellow", "60"),
         EmbThreadPec(227, 243, 91, "Fresh Green", "61"),
-        EmbThreadPec(255, 153, 0, "Orange", "62"),
-        EmbThreadPec(255, 240, 141, "Cream Yellow", "63"),
-        EmbThreadPec(255, 200, 200, "Applique", "64"),
+        # Machine functions, not real thread colors
+        EmbThreadPec(255, 200, 100, "Applique Material", "62", reserved=True),
+        EmbThreadPec(255, 200, 200, "Applique Position", "63", reserved=True),
+        EmbThreadPec(255, 200, 200, "Applique", "64", reserved=True),
     ]
 
 
 class EmbThreadPec(EmbThread):
-    def __init__(self, red, green, blue, description, catalog_number):
+    def __init__(self, red, green, blue, description, catalog_number, reserved=False):
         EmbThread.__init__(self)
         self.set_color(red, green, blue)
         self.description = description
         self.catalog_number = catalog_number
         self.brand = "Brother"
         self.chart = "Brother"
+        self.reserved = reserved

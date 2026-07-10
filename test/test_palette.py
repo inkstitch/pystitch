@@ -43,7 +43,10 @@ class TestPalettes(unittest.TestCase):
         """If the entries equal the list they should all map."""
         pattern = EmbPattern()
         threadset = get_thread_set()
-        for i in range(0, len(threadset)-2):
+        matchable_count = sum(
+            1 for t in threadset if t is not None and not getattr(t, "reserved", False)
+        )
+        for i in range(0, matchable_count):
             thread = EmbThread()
             thread.set_color(i, i, i)
             pattern += thread
@@ -89,6 +92,31 @@ class TestPalettes(unittest.TestCase):
         palette = build_nonrepeat_palette(threadset,pattern.threadlist)
         self.assertEqual(palette[0], palette[3], "Red and Red")
         self.assertEqual(palette[1], palette[2], "Blue and Blue")
+
+    def test_reserved_indices_excluded_from_matching(self):
+        threadset = get_thread_set()
+        for i in (62, 63, 64):
+            self.assertTrue(threadset[i].reserved)
+
+        # Two colliding "Deep Gold" threads used to fall through to the
+        # reserved index 62 slot (inkstitch#1105).
+        pattern = EmbPattern()
+        gold1 = EmbThread()
+        gold1.set_color(0xE8, 0xA9, 0x00)
+        gold2 = EmbThread()
+        gold2.set_color(0xE8, 0xA9, 0x00)
+        pattern.threadlist = [gold1, gold2]
+        palette = build_unique_palette(get_thread_set(), pattern.threadlist)
+        self.assertNotIn(62, palette)
+        self.assertNotIn(63, palette)
+        self.assertNotIn(64, palette)
+
+        # An RGB value that lands on reserved must resolve to a real color
+        # instead.
+        exact = EmbThread()
+        exact.set_color(255, 200, 200)
+        index = exact.find_nearest_color_index(get_thread_set())
+        self.assertNotIn(index, (62, 63, 64))
 
     def test_palette(self):
         """Similar colors map to the same index"""
