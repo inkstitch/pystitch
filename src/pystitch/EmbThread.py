@@ -54,7 +54,7 @@ def find_nearest_color_index(find_color, values):
     closest_index = None
     current_closest_value = float("inf")
     for current_index, t in enumerate(values):
-        if t is None:
+        if t is None or getattr(t, "reserved", False):
             continue
         dist = color_distance_red_mean(
             red, green, blue, t.get_red(), t.get_green(), t.get_blue()
