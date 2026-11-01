@@ -29,10 +29,9 @@ def read_zhs_stitches(f: BinaryIO, out: EmbPattern):
         x += b[1] & 0b01000000
         x += b[2] & 0b10000000
         x = signed8(x)
-        if x >= 63:
-            x += 1
-        if x <= -63:
-            x -= 1
+        # Previously, the ZHS reader added or subtracted 1 if abs(x)>=63 here.
+        # This was incorrect behaviour, see comment in test_read_zhs.py. The
+        # same error was present later for y.
 
         # y
         y = 0
@@ -46,10 +45,6 @@ def read_zhs_stitches(f: BinaryIO, out: EmbPattern):
         y += b[1] & 0b10000000
 
         y = signed8(y)
-        if y >= 63:
-            y += 1
-        if y <= -63:
-            y -= 1
 
         xx += x
         yy += y
